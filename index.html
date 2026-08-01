@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Brain, Measured and Moved — Chi-Hung Juan Lab</title>
+<style>
+  :root{
+    --navy:#12305C; --navy2:#1B4380; --ink:#1A1A1A; --teal:#1F7A8C; --tealL:#E4F0F3;
+    --gold:#D9A441; --goldL:#FBF2E1; --coral:#C0504D; --coralL:#FAEBEA;
+    --sage:#5E9E7E; --sageL:#E7F2EC; --purple:#8E44AD; --purpleL:#F4ECF7;
+    --grey:#6E6E6E; --greyL:#F3F5F8; --line:#DCE3EC;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman","Songti TC",serif;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  h1,h2,h3{line-height:1.25;margin:0}
+  a{color:var(--teal)}
+  button{font-family:inherit}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,0.03)}
+  .navin{max-width:1120px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brand{font-weight:800;color:var(--navy);font-size:15px;letter-spacing:.2px;margin-right:auto;display:flex;align-items:center;gap:8px}
+  .brand-badge{background:var(--navy);color:#fff;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:700}
+  .navlinks{display:flex;gap:16px;flex-wrap:wrap}
+  .navlinks a{color:var(--grey);text-decoration:none;font-size:13.5px;font-weight:600;transition:color .15s}
+  .navlinks a:hover{color:var(--navy)}
+  .langtog{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .langtog button{border:0;background:#fff;color:var(--grey);padding:5px 13px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .15s}
+  .langtog button.on{background:var(--navy);color:#fff}
+
+  /* ---------- hero ---------- */
+  header.hero{background:linear-gradient(160deg,#0D2445 0%,#12305C 45%,#1B4380 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+  header.hero::after{content:"";position:absolute;inset:0;background:
+    radial-gradient(circle at 82% 26%,rgba(217,164,65,.20),transparent 42%),
+    radial-gradient(circle at 12% 82%,rgba(31,122,140,.28),transparent 46%);pointer-events:none}
+  .hero .wrap{position:relative;z-index:1}
+  .kicker{color:var(--gold);font-weight:800;letter-spacing:2.4px;font-size:11.5px;text-transform:uppercase}
+  .hero h1{font-family:var(--serif);font-size:clamp(30px,5.2vw,50px);margin:12px 0 14px;font-weight:700}
+  .hero p.lede{font-size:clamp(15px,2.1vw,18.5px);max-width:750px;color:#CFDCEC;margin:0 0 26px}
+  .cta-group{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .cta{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:#33260A;border:0;padding:13px 24px;
+       border-radius:999px;font-weight:800;font-size:14.5px;cursor:pointer;text-decoration:none;transition:transform .15s,background .15s}
+  .cta:hover{background:#E8B658;transform:translateY(-1px)}
+  .cta.ghost{background:transparent;color:#CFDCEC;border:1.5px solid rgba(207,220,236,.45)}
+  .cta.ghost:hover{background:rgba(255,255,255,.08);color:#fff}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-top:40px}
+  .stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 15px;backdrop-filter:blur(4px)}
+  .stat b{display:block;font-family:var(--serif);font-size:29px;color:var(--gold);line-height:1.1}
+  .stat span{font-size:11.5px;color:#B9CCE3;display:block;margin-top:5px}
+
+  /* ---------- generic section ---------- */
+  section{padding:62px 0;border-top:1px solid var(--line)}
+  section.alt{background:var(--greyL)}
+  .sechead{max-width:780px;margin-bottom:34px}
+  .sechead .kicker{color:var(--gold)}
+  .sechead h2{font-family:var(--serif);font-size:clamp(24px,3.6vw,34px);color:var(--navy);margin:9px 0 12px}
+  .sechead p{color:#444;font-size:16px;margin:0}
+
+  /* ---------- experiment bench ---------- */
+  .expgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:16px}
+  .expcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:19px;cursor:pointer;
+           transition:transform .16s,box-shadow .16s,border-color .16s;display:flex;flex-direction:column;position:relative}
+  .expcard:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(18,48,92,.13);border-color:var(--teal)}
+  .expcard .tagline{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:9px}
+  .expcard h3{font-size:17.5px;color:var(--navy);margin-bottom:7px}
+  .expcard p{font-size:13.5px;color:#555;margin:0 0 14px;flex:1}
+  .expcard .bottom-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+  .expcard .go{font-size:13px;font-weight:800;color:var(--teal)}
+  .expcard .mins{font-size:11.5px;color:var(--grey)}
+
+  /* ---------- modal / task stage ---------- */
+  .modal{position:fixed;inset:0;background:rgba(8,18,34,.86);z-index:200;display:none;padding:20px;overflow-y:auto}
+  .modal.open{display:block}
+  .sheet{max-width:840px;margin:26px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+  .sheethead{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:14px}
+  .sheethead h3{font-size:17px;flex:1}
+  .closebtn{background:rgba(255,255,255,.15);border:0;color:#fff;width:32px;height:32px;border-radius:50%;font-size:19px;cursor:pointer;line-height:1}
+  .sheetbody{padding:22px}
+  .stage{background:#0E1826;border-radius:12px;min-height:330px;display:flex;align-items:center;justify-content:center;
+         position:relative;color:#fff;user-select:none;overflow:hidden}
+  .stage .fix{font-size:30px;color:#9FB4CE}
+  .stage .msg{text-align:left;max-width:540px;padding:26px;font-size:15px;color:#D5E1F0}
+  .stage .msg h4,.stage .msg .big{text-align:center}
+  .stage .msg .big+p{text-align:center}
+  .stage .msg h4{color:#fff;font-size:20px;margin-bottom:10px;font-family:var(--serif)}
+  .stage .big{font-size:52px;font-weight:800}
+  .progbar{height:5px;background:var(--greyL);border-radius:99px;overflow:hidden;margin-top:14px}
+  .progbar i{display:block;height:100%;background:var(--teal);width:0;transition:width .2s}
+  .keyhint{margin-top:13px;font-size:13px;color:var(--grey);text-align:center}
+  .kbd{display:inline-block;background:#fff;border:1px solid #BBB;border-bottom-width:2px;border-radius:5px;padding:1px 8px;font-weight:700;font-size:12.5px;color:#333}
+  .touchrow{display:flex;gap:10px;justify-content:center;margin-top:13px;flex-wrap:wrap}
+  .touchrow button{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:13px 22px;font-size:15px;font-weight:700;cursor:pointer}
+  .touchrow button:hover{background:var(--navy2)}
+
+  /* result */
+  .resultbox{background:var(--tealL);border:1px solid #BBD8DF;border-radius:12px;padding:19px;margin-top:16px}
+  .resultbox .num{font-family:var(--serif);font-size:40px;color:var(--teal);line-height:1;font-weight:700}
+  .resultbox .lbl{font-size:12.5px;color:#3B6570;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+  .findbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin-top:16px;box-shadow:0 6px 20px rgba(0,0,0,0.04)}
+  .findbox h4{color:var(--navy);font-size:16px;margin-bottom:10px;font-family:var(--serif)}
+  .findbox p{font-size:13.5px;margin:0 0 9px;color:#333;line-height:1.55}
+  .cite{font-size:12px;color:var(--grey);font-style:italic}
+  details.deeper{margin-top:14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  details.deeper summary{cursor:pointer;padding:12px 15px;font-weight:800;font-size:13.5px;color:var(--navy);list-style:none}
+  details.deeper summary::-webkit-details-marker{display:none}
+  details.deeper summary::before{content:"▸ ";color:var(--gold)}
+  details.deeper[open] summary::before{content:"▾ "}
+  details.deeper .dbody{padding:0 15px 15px;font-size:13.5px;color:#444}
+  details.deeper .dbody b{color:var(--navy)}
+
+  /* ---------- BRAIN MAP SECTION ---------- */
+  .brainmap-container{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:start}
+  @media(max-width:900px){.brainmap-container{grid-template-columns:1fr}}
+  .brain-card{background:#0C182B;border-radius:16px;padding:24px;color:#fff;box-shadow:0 16px 40px rgba(12,24,43,.25);position:relative;overflow:hidden}
+  .brain-tabs-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .brain-tab-btn{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);color:#C2D3E8;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+  .brain-tab-btn:hover,.brain-tab-btn.active{background:var(--gold);color:#33260A;border-color:var(--gold)}
+  
+  .brain-svg-wrap{width:100%;height:auto;position:relative}
+  .brain-node{cursor:pointer;pointer-events:all}
+  .brain-node:hover circle.node-glow{fill-opacity:0.65;r:26px}
+  .brain-node.active circle.node-glow{fill:var(--gold) !important;fill-opacity:0.5 !important;r:28px !important;animation:pulse 1.8s infinite}
+  .brain-node.active circle.node-core{fill:var(--gold) !important;stroke:#fff !important;stroke-width:3px}
+  @keyframes pulse{0%{r:20px;opacity:0.8} 50%{r:30px;opacity:0.3} 100%{r:20px;opacity:0.8}}
+
+  .brain-info-panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.04)}
+  .brain-info-panel h3{color:var(--navy);font-size:20px;margin-bottom:6px;font-family:var(--serif)}
+  .brain-info-panel .region-tag{display:inline-block;background:var(--tealL);color:var(--teal);font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:99px;margin-bottom:12px;letter-spacing:.5px;text-transform:uppercase}
+  .brain-info-panel p{font-size:14px;color:#444;margin:0 0 14px}
+  .brain-info-panel .tech-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+  .brain-info-panel .tech-pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--greyL);color:var(--grey)}
+  .filter-region-btn{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;border:0;padding:9px 16px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s}
+  .filter-region-btn:hover{background:var(--navy2)}
+
+  /* ---------- PUBLICATION LIBRARY SECTION ---------- */
+  .lib-controls{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:24px;box-shadow:0 4px 16px rgba(0,0,0,0.02)}
+  .lib-search-box{position:relative;margin-bottom:16px}
+  .lib-search-box input{width:100%;padding:12px 16px 12px 42px;border:1px solid var(--line);border-radius:10px;font-size:14.5px;outline:none;transition:border-color .15s,box-shadow .15s}
+  .lib-search-box input:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--tealL)}
+  .lib-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--grey);font-size:16px}
+  .filter-group-title{font-size:11.5px;font-weight:800;color:var(--grey);letter-spacing:1px;text-transform:uppercase;margin:12px 0 6px}
+  .pills-row{display:flex;gap:8px;flex-wrap:wrap}
+  .pill-btn{border:1px solid var(--line);background:#fff;color:var(--grey);padding:5px 13px;border-radius:99px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .15s}
+  .pill-btn:hover{border-color:var(--teal);color:var(--navy)}
+  .pill-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+  .lib-status-bar{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--grey);margin-bottom:16px;padding:0 4px}
+  .paper-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .paper-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column}
+  .paper-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(18,48,92,.08);border-color:var(--teal)}
+  .paper-card .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .paper-card .paper-yr{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--gold)}
+  .paper-card .paper-lang{font-size:10.5px;font-weight:800;padding:2px 6px;border-radius:4px;background:var(--greyL);color:var(--grey)}
+  .paper-card .paper-title{font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.35;margin-bottom:10px;flex:1}
+  .paper-card .paper-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+  .paper-card .tag{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--tealL);color:var(--teal)}
+  .paper-card .tag.modality{background:var(--goldL);color:#8A6516}
+  .paper-card .tag.region{background:var(--purpleL);color:var(--purple)}
+  .paper-card .pdf-btn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--teal);text-decoration:none;margin-top:auto}
+  .paper-card .pdf-btn:hover{text-decoration:underline}
+
+  /* ---------- themes ---------- */
+  .themegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .theme{background:#fff;border:1px solid var(--line);border-left:none;border-radius:var(--radius);padding:20px}
+  .theme .th-top{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
+  .theme .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .theme h3{font-size:16.5px;color:var(--navy)}
+  .theme .yrs{margin-left:auto;font-size:11.5px;color:var(--grey);font-weight:700;white-space:nowrap}
+  .theme p{font-size:13.8px;color:#4A4A4A;margin:0 0 12px}
+  .theme ul{margin:0;padding-left:17px;font-size:13.2px;color:#444}
+  .theme li{margin-bottom:6px}
+  .theme li b{color:var(--navy)}
+
+  /* ---------- impact ---------- */
+  .chartcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .scholar-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+  .scholar-stat-card{background:var(--greyL);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+  .scholar-stat-card b{display:block;font-family:var(--serif);font-size:32px;color:var(--navy);line-height:1.1}
+  .scholar-stat-card span{font-size:12px;font-weight:700;color:var(--grey);display:block;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+  .scholar-stat-card small{font-size:11px;color:var(--teal);display:block;margin-top:2px;font-weight:600}
+
+  .toplist{list-style:none;padding:0;margin:0}
+  .toplist li{display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.7px}
+  .toplist li:last-child{border-bottom:0}
+  .toplist .cnum{font-family:var(--serif);font-weight:700;color:var(--gold);font-size:19px;min-width:48px;text-align:right}
+  .toplist .ctitle{color:#333}
+  .toplist .ctitle b{color:var(--navy);display:block;font-size:14px;margin-bottom:2px}
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+  @media(max-width:820px){.two{grid-template-columns:1fr}}
+
+  /* ---------- techniques ---------- */
+  .techgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px}
+  .tech{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px}
+  .tech b{color:var(--navy);font-size:14.5px;display:block;margin-bottom:5px}
+  .tech span{font-size:12.7px;color:#555}
+
+  /* ---------- join ---------- */
+  .joinbox{background:linear-gradient(150deg,#12305C,#1B4380);color:#fff;border-radius:var(--radius);padding:34px}
+  .joinbox h3{font-family:var(--serif);font-size:25px;margin-bottom:12px}
+  .joinbox p{color:#CBDAEC;font-size:15px;margin:0 0 16px}
+  .joinbox ul{color:#CBDAEC;font-size:14.2px;padding-left:19px;margin:0 0 18px}
+  .joinbox li{margin-bottom:7px}
+  .joinbox a.mail{color:var(--gold);font-weight:800;text-decoration:none;font-size:16px}
+
+  footer{padding:30px 0 44px;font-size:12.4px;color:var(--grey)}
+  footer a{color:var(--grey)}
+  .note{font-size:12px;color:var(--grey);margin-top:9px;font-style:italic}
+</style>
+</head>
+<body>
+
+<!-- =================== PASSWORD ACCESS GATE =================== -->
+<div id="password-gate" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(145deg, #0C182B 0%, #12305C 60%, #1B4380 100%);display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:20px;padding:36px 32px;max-width:440px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,0.4);text-align:center;">
+    <div style="font-size:42px;margin-bottom:12px">🔒</div>
+    <h2 style="font-family:var(--serif);font-size:24px;color:var(--navy);margin-bottom:8px">
+      <span class="en">Lab Member Access</span><span class="zh">中央大學實驗室存取驗證</span>
+    </h2>
+    <p style="font-size:13.5px;color:var(--grey);margin:0 0 20px;line-height:1.5">
+      <span class="en">This site is password-protected for lab members. Please enter the passcode provided by Prof. Chi-Hung Juan.</span>
+      <span class="zh">本網頁受存取保護，請輸入阮啟弘教授提供之實驗室密碼。</span>
+    </p>
+
+    <form onsubmit="checkPasscode(event)" style="display:flex;flex-direction:column;gap:12px">
+      <input type="password" id="passcode-input" placeholder="Enter password..." style="width:100%;padding:14px 16px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;outline:none;text-align:center;letter-spacing:2px;" autofocus>
+      <div id="passcode-error" style="color:var(--coral);font-size:12.5px;font-weight:700;display:none">
+        <span class="en">Incorrect password. Please try again.</span>
+        <span class="zh">密碼錯誤，請重新輸入。</span>
+      </div>
+      <button type="submit" class="cta" style="width:100%;justify-content:center;padding:13px;border-radius:10px;font-size:15px">
+        <span class="en">Enter Website →</span><span class="zh">進入網站 →</span>
+      </button>
+    </form>
+    
+    <div style="margin-top:20px;font-size:11.5px;color:var(--grey)">
+      <span class="en">National Central University · Visual Cognition Lab</span>
+      <span class="zh">國立中央大學 視覺認知實驗室</span>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="navin">
+    <div class="brand">
+      <span>Chi-Hung Juan Lab</span>
+      <span class="brand-badge">NCU VCL</span>
+    </div>
+    <div class="navlinks">
+      <a href="#bench"><span class="en">Experiments</span><span class="zh">動手實驗</span></a>
+      <a href="#brainmap"><span class="en">Brain Map</span><span class="zh">腦區地圖</span></a>
+      <a href="#library"><span class="en">Papers (140)</span><span class="zh">論文庫 (140)</span></a>
+      <a href="#themes"><span class="en">Research</span><span class="zh">研究主題</span></a>
+      <a href="#impact"><span class="en">Impact</span><span class="zh">影響力</span></a>
+      <a href="#learn"><span class="en">Training</span><span class="zh">訓練內容</span></a>
+      <a href="#join"><span class="en">Join</span><span class="zh">加入我們</span></a>
+    </div>
+    <div class="langtog">
+      <button id="btn-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="btn-zh" onclick="setLang('zh')">中文</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker"><span class="en">Institute of Cognitive Neuroscience · National Central University</span><span class="zh">國立中央大學 認知神經科學研究所</span></div>
+    <h1><span class="en">The brain, measured and moved</span><span class="zh">量測大腦，也改變大腦</span></h1>
+    <p class="lede">
+      <span class="en">For 26 years this lab has asked two questions: How does the brain choose what to attend to, hold in mind, and stop itself from doing? And — once we know — can we reach in and change it? Don't take our word for it. Run the experiments yourself or explore our 140+ published papers.</span>
+      <span class="zh">二十六年來，本實驗室追問兩個問題：大腦如何決定要注意什麼、記住什麼、以及何時該踩煞車？而當我們知道了答案，能不能真的介入並改變它？親自跑一次實驗，或探索我們 140 篇發表論文。</span>
+    </p>
+    <div class="cta-group">
+      <a class="cta" href="#bench"><span class="en">Start an experiment →</span><span class="zh">從實驗開始 →</span></a>
+      <a class="cta ghost" href="#brainmap"><span class="en">Brain Target Map</span><span class="zh">探索腦區地圖</span></a>
+      <a class="cta ghost" href="#library"><span class="en">Search 140+ Papers</span><span class="zh">檢索 140 篇論文</span></a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>8,132</b><span class="en">total citations</span><span class="zh">總被引用次數</span></div>
+      <div class="stat"><b>49</b><span class="en">h-index</span><span class="zh">h-index 指標</span></div>
+      <div class="stat"><b>110</b><span class="en">i10-index</span><span class="zh">i10-index 指標</span></div>
+      <div class="stat"><b>145</b><span class="en">peer-reviewed papers</span><span class="zh">同儕審查論文</span></div>
+      <div class="stat"><b>2000–2026</b><span class="en">26 years of research</span><span class="zh">橫跨 26 年</span></div>
+      <div class="stat"><b>72</b><span class="en">as corresponding author</span><span class="zh">篇為通訊作者</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- =================== BENCH =================== -->
+<section id="bench">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="kicker"><span class="en">The lab bench</span><span class="zh">實驗台</span></div>
+      <h2><span class="en">Four experiments. Yours to run.</span><span class="zh">四個實驗，你來跑一次</span></h2>
+      <p>
+        <span class="en">These are working miniatures of paradigms this lab has published with. You'll get your own number at the end — then we'll show you what we found when we ran the full version, with brain stimulation on top.</span>
+        <span class="zh">以下是本實驗室實際發表過的作業之簡化版本。做完會得到屬於你自己的數據——接著我們會告訴你，當我們用完整版本、再加上腦刺激時，發現了什麼。</span>
+      </p>
+    </div>
+    <div class="expgrid" id="expgrid"></div>
+    <p class="note">
+      <span class="en">Best on a laptop with a keyboard. Nothing you do here is recorded or sent anywhere — everything stays in your browser.</span>
+      <span class="zh">建議使用筆電與鍵盤操作。你的作答不會被記錄或上傳，所有資料僅存在你的瀏覽器中。</span>
+    </p>
+  </div>
+</section>
+
+<!-- =================== BRAIN MAP =================== -->
+<section id="brainmap" class="alt">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="kicker"><span class="en">Neuromodulation Targets</span><span class="zh">腦刺激部位與神經迴路</span></div>
+      <h2><span class="en">Interactive Brain Region Target Map</span><span class="zh">互動式大腦刺激標的地圖</span></h2>
+      <p>
+        <span class="en">Click on any target button or cortical node on the brain map to discover stimulation paradigms, causal findings, and linked papers.</span>
+        <span class="zh">點擊下方按鈕或腦圖上的標的點，探索實驗室的腦刺激典範、因果發現與相關論文。</span>
+      </p>
+    </div>
+
+    <div class="brainmap-container">
+      <div class="brain-card">
+        <div style="font-size:12px;color:var(--gold);font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">
+          <span class="en">Right Hemisphere Target Selector (Lateral View)</span><span class="zh">右半腦刺激標的選擇器（外側解剖視圖）</span>
+        </div>
+
+        <div class="brain-tabs-row">
+          <button class="brain-tab-btn active" id="tab-FEF" onclick="selectRegion('FEF')">FEF</button>
+          <button class="brain-tab-btn" id="tab-pre-SMA" onclick="selectRegion('pre-SMA')">pre-SMA</button>
+          <button class="brain-tab-btn" id="tab-rIFG" onclick="selectRegion('rIFG')">rIFG</button>
+          <button class="brain-tab-btn" id="tab-DLPFC" onclick="selectRegion('DLPFC')">DLPFC</button>
+          <button class="brain-tab-btn" id="tab-PPC" onclick="selectRegion('PPC')">rPPC / PPC</button>
+          <button class="brain-tab-btn" id="tab-rTPJ" onclick="selectRegion('rTPJ')">rTPJ</button>
+        </div>
+
+        <div class="brain-svg-wrap">
+          <svg viewBox="0 0 620 380" style="width:100%;height:auto;display:block">
+            <!-- RIGHT HEMISPHERE SILHOUETTE (Frontal=Right, Occipital=Left) -->
+            <path d="M500,240 C520,200 510,130 460,80 C390,20 230,20 140,70 C80,110 60,160 70,220 C80,260 100,290 150,300 C190,310 220,280 270,280 C300,280 330,320 390,320 C450,320 480,280 500,240 Z"
+                  fill="#142642" stroke="#264875" stroke-width="3"/>
+            
+            <!-- Cerebellum & Stem (Under Occipital on Left) -->
+            <path d="M150,300 C110,310 80,340 120,360 C160,370 190,340 200,310 Z" fill="#101F36" stroke="#264875" stroke-width="2"/>
+            <path d="M270,280 L270,370 L310,370 L310,280 Z" fill="#0D192C" stroke="#1F3A5F" stroke-width="2"/>
+
+            <!-- Sulci / Gyri contours -->
+            <path d="M330,65 C320,140 290,200 250,270" fill="none" stroke="#1E3A61" stroke-dasharray="4,4" stroke-width="2"/>
+            <path d="M420,160 C360,180 280,170 160,200" fill="none" stroke="#1E3A61" stroke-dasharray="4,4" stroke-width="2"/>
+
+            <!-- Anatomical Labels (Frontal vs Occipital) -->
+            <text x="500" y="160" fill="rgba(255,255,255,0.25)" font-size="11" font-weight="700" text-anchor="middle">ANTERIOR (FRONTAL)</text>
+            <text x="120" y="160" fill="rgba(255,255,255,0.25)" font-size="11" font-weight="700" text-anchor="middle">POSTERIOR (OCCIPITAL)</text>
+
+            <!-- RIGHT HEMISPHERE TARGET NODES -->
+            <!-- 1. pre-SMA (Superior Dorsomedial Frontal - Top Edge at FEF AP Axis) -->
+            <g class="brain-node" onclick="selectRegion('pre-SMA')" id="node-pre-SMA">
+              <circle cx="310" cy="68" r="32" fill="transparent" pointer-events="all"/>
+              <circle class="node-glow" cx="310" cy="68" r="20" fill="rgba(217,164,65,0.4)"/>
+              <circle class="node-core" cx="310" cy="68" r="10" fill="#D9A441" stroke="#fff" stroke-width="2.5"/>
+              <text x="310" y="46" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">pre-SMA</text>
+            </g>
+
+            <!-- 2. FEF (Right Frontal Eye Fields - BA 8) -->
+            <g class="brain-node active" onclick="selectRegion('FEF')" id="node-FEF">
+              <circle cx="345" cy="115" r="32" fill="transparent" pointer-events="all"/>
+              <circle class="node-glow" cx="345" cy="115" r="20" fill="rgba(31,122,140,0.4)"/>
+              <circle class="node-core" cx="345" cy="115" r="10" fill="#1F7A8C" stroke="#fff" stroke-width="2.5"/>
+              <text x="345" y="94" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">FEF</text>
+            </g>
+
+            <!-- 3. DLPFC (Right Dorsolateral Prefrontal Cortex - BA 9/46) -->
+            <g class="brain-node" onclick="selectRegion('DLPFC')" id="node-DLPFC">
+              <circle cx="410" cy="155" r="32" fill="transparent" pointer-events="all"/>
+              <circle class="node-glow" cx="410" cy="155" r="20" fill="rgba(94,158,126,0.4)"/>
+              <circle class="node-core" cx="410" cy="155" r="10" fill="#5E9E7E" stroke="#fff" stroke-width="2.5"/>
+              <text x="410" y="132" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">DLPFC</text>
+            </g>
+
+            <!-- 4. rIFG (Right Inferior Frontal Gyrus - BA 44/45) -->
+            <g class="brain-node" onclick="selectRegion('rIFG')" id="node-rIFG">
+              <circle cx="375" cy="225" r="32" fill="transparent" pointer-events="all"/>
+              <circle class="node-glow" cx="375" cy="225" r="20" fill="rgba(192,80,77,0.4)"/>
+              <circle class="node-core" cx="375" cy="225" r="10" fill="#C0504D" stroke="#fff" stroke-width="2.5"/>
+              <text x="375" y="255" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">rIFG</text>
+            </g>
+
+            <!-- 5. rPPC / PPC (Right Posterior Parietal Cortex - BA 7/40) -->
+            <g class="brain-node" onclick="selectRegion('PPC')" id="node-PPC">
+              <circle cx="180" cy="110" r="32" fill="transparent" pointer-events="all"/>
+              <circle class="node-glow" cx="180" cy="110" r="20" fill="rgba(217,164,65,0.4)"/>
+              <circle class="node-core" cx="180" cy="110" r="10" fill="#D9A441" stroke="#fff" stroke-width="2.5"/>
+              <text x="180" y="88" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">rPPC / PPC</text>
+            </g>
+
+            <!-- 6. rTPJ (Right Temporoparietal Junction - BA 39/40) -->
+            <g class="brain-node" onclick="selectRegion('rTPJ')" id="node-rTPJ">
+              <circle cx="175" cy="205" r="32" fill="transparent" pointer-events="all"/>
+              <circle class="node-glow" cx="175" cy="205" r="20" fill="rgba(142,68,173,0.4)"/>
+              <circle class="node-core" cx="175" cy="205" r="10" fill="#8E44AD" stroke="#fff" stroke-width="2.5"/>
+              <text x="175" y="235" fill="#fff" font-size="13" font-weight="800" text-anchor="middle">rTPJ</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Brain Node Detail Card -->
+      <div class="brain-info-panel" id="brain-info-panel">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PUBLICATION LIBRARY =================== -->
+<section id="library">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="kicker"><span class="en">Bibliography &amp; Repository</span><span class="zh">論文資料庫檢索</span></div>
+      <h2><span class="en">Explore 140+ Published Papers</span><span class="zh">檢索 140 篇已發表學術論文</span></h2>
+      <p>
+        <span class="en">Search through the lab's complete research archive spanning 2000 to 2026. Filter by topic, stimulation modality, year, or search keywords.</span>
+        <span class="zh">搜尋實驗室自 2000 年至 2026 年的完整發表檔案。可依主題、腦刺激技術、年份或關鍵字進行即時篩選。</span>
+      </p>
+    </div>
+
+    <div class="lib-controls">
+      <div class="lib-search-box">
+        <span class="lib-search-icon">🔍</span>
+        <input type="text" id="lib-search-input" placeholder="Search titles, authors, brain regions, disorders (e.g. TMS, depression, FEF, SSRT, HHSA, Parkinson)..." oninput="filterPapers()">
+      </div>
+
+      <div class="filter-group-title"><span class="en">Filter by Research Topic</span><span class="zh">依研究主題篩選</span></div>
+      <div class="pills-row" id="topic-pills">
+        <button class="pill-btn active" onclick="setTopicFilter('all')"><span class="en">All Topics</span><span class="zh">全部主題</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('attention')"><span class="en">Attention &amp; FEF</span><span class="zh">注意力與 FEF</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('memory')"><span class="en">Working Memory</span><span class="zh">工作記憶</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('inhibition')"><span class="en">Inhibitory Control</span><span class="zh">抑制控制 (SSRT)</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('oscillations')"><span class="en">Oscillations &amp; HHSA</span><span class="zh">腦波與 HHSA</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('exercise')"><span class="en">Exercise &amp; Sports</span><span class="zh">運動認知</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('clinical')"><span class="en">Clinical &amp; Therapy</span><span class="zh">臨床與腦刺激</span></button>
+        <button class="pill-btn" onclick="setTopicFilter('chinese')"><span class="en">Chinese Papers</span><span class="zh">中文論文</span></button>
+      </div>
+
+      <div class="filter-group-title" style="margin-top:14px"><span class="en">Filter by Technique / Modality</span><span class="zh">依技術／工具篩選</span></div>
+      <div class="pills-row" id="mod-pills">
+        <button class="pill-btn active" onclick="setModFilter('all')"><span class="en">All Techniques</span><span class="zh">全部技術</span></button>
+        <button class="pill-btn" onclick="setModFilter('TMS')">TMS / rTMS / iTBS</button>
+        <button class="pill-btn" onclick="setModFilter('tDCS/tACS')">tDCS / tACS</button>
+        <button class="pill-btn" onclick="setModFilter('EEG/MEG')">EEG / MEG</button>
+        <button class="pill-btn" onclick="setModFilter('Eye-Tracking')">Eye-Tracking</button>
+      </div>
+    </div>
+
+    <div class="lib-status-bar">
+      <div id="lib-count-text">Showing 140 papers</div>
+      <button class="pill-btn" id="reset-filters-btn" onclick="resetAllFilters()" style="display:none"><span class="en">Reset Filters</span><span class="zh">重設篩選</span></button>
+    </div>
+
+    <div class="paper-grid" id="paper-grid"></div>
+  </div>
+</section>
+
+<!-- =================== THEMES =================== -->
+<section id="themes" class="alt">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="kicker"><span class="en">Research Lines</span><span class="zh">研究主題</span></div>
+      <h2><span class="en">Six lines of work, one question underneath</span><span class="zh">六條研究主線，底下是同一個問題</span></h2>
+      <p>
+        <span class="en">Everything here comes back to the frontoparietal control system — the network that decides what gets attention, what gets remembered, and what gets stopped. We map it, then we try to move it.</span>
+        <span class="zh">所有研究都回到同一個系統：額頂葉控制網路——決定什麼被注意、什麼被記住、什麼被抑制。我們先把它畫出來，再設法改變它。</span>
+      </p>
+    </div>
+    <div class="themegrid" id="themegrid"></div>
+  </div>
+</section>
+
+<!-- =================== IMPACT =================== -->
+<section id="impact">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="kicker"><span class="en">Academic Citation &amp; Impact</span><span class="zh">學術引用與學術影響力</span></div>
+      <h2><span class="en">Academic Record &amp; Citation Impact</span><span class="zh">學術引用與影響力表現</span></h2>
+      <p>
+        <span class="en">Official Google Scholar metrics and citation trajectory for Prof. Chi-Hung Juan (8,132 citations, h-index 49, i10-index 110). Click any year bar below to filter papers.</span>
+        <span class="zh">阮啟弘教授 Google Scholar 官方最新學術數據（累計 8,132 次引用、h-index 49、i10-index 110）。點擊下方年份可直接檢索該年度論文。</span>
+      </p>
+      <div style="margin-top:14px">
+        <a class="cta" href="https://scholar.google.com/citations?hl=en&user=Gke05lUAAAAJ&view_op=list_works&pagesize=100" target="_blank" style="padding:9px 20px;font-size:13.5px">
+          🎓 <span class="en">View Live Profile on Google Scholar ↗</span><span class="zh">造訪 Google Scholar 即時個人檔案 ↗</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SCHOLAR METRICS SUMMARY CARD -->
+    <div class="scholar-summary">
+      <div class="scholar-stat-card">
+        <b>8,132</b>
+        <span><span class="en">Total Citations</span><span class="zh">總被引用次數</span></span>
+        <small>3,971 <span class="en">since 2021</span><span class="zh">2021 年起</span></small>
+      </div>
+      <div class="scholar-stat-card">
+        <b>49</b>
+        <span><span class="en">h-index</span><span class="zh">h-index 指標</span></span>
+        <small>35 <span class="en">since 2021</span><span class="zh">2021 年起</span></small>
+      </div>
+      <div class="scholar-stat-card">
+        <b>110</b>
+        <span><span class="en">i10-index</span><span class="zh">i10-index 指標</span></span>
+        <small>91 <span class="en">since 2021</span><span class="zh">2021 年起</span></small>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="chartcard">
+        <h3 style="font-size:15.5px;color:var(--navy);margin-bottom:4px">
+          <span class="en">Citations per year (2019–2026)</span><span class="zh">歷年引用次數（2019–2026）</span></h3>
+        <p style="font-size:12.6px;color:var(--grey);margin:0 0 12px">
+          <span class="en">Hover a bar for annual citation counts. Click to filter publication list below.</span>
+          <span class="zh">滑過長條看年度引用數，點擊可篩選下方論文庫。</span></p>
+        <div id="yearchart"></div>
+      </div>
+      <div class="chartcard">
+        <h3 style="font-size:15.5px;color:var(--navy);margin-bottom:4px">
+          <span class="en">Selected journals</span><span class="zh">代表期刊</span></h3>
+        <p style="font-size:12.6px;color:var(--grey);margin:0 0 12px">
+          <span class="en">Where this work is published.</span><span class="zh">研究發表的舞台。</span></p>
+        <div id="jlist"></div>
+      </div>
+    </div>
+
+    <div class="chartcard" style="margin-top:18px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+        <div>
+          <h3 style="font-size:15.5px;color:var(--navy);margin-bottom:2px">
+            <span class="en">Most-cited papers (Google Scholar Profile)</span><span class="zh">引用次數最高之代表論文（Google Scholar 數據）</span></h3>
+          <p style="font-size:12.6px;color:var(--grey);margin:0">
+            <span class="en">Official top-cited publications from Prof. Chi-Hung Juan's Scholar profile.</span>
+            <span class="zh">阮啟弘教授 Google Scholar 個人檔案最高引用發表快照。</span></p>
+        </div>
+        <a href="https://scholar.google.com/citations?hl=en&user=Gke05lUAAAAJ&view_op=list_works&pagesize=100" target="_blank" style="font-size:13px;font-weight:700;color:var(--teal);text-decoration:none">
+          🎓 <span class="en">Open Google Scholar Profile ↗</span><span class="zh">開啟 Google Scholar 個人頁面 ↗</span>
+        </a>
+      </div>
+      <ul class="toplist" id="toplist"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- =================== LEARN =================== -->
+<section id="learn" class="alt">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="kicker"><span class="en">Training</span><span class="zh">訓練內容</span></div>
+      <h2><span class="en">What you would actually learn here</span><span class="zh">你在這裡會真正學到的東西</span></h2>
+      <p>
+        <span class="en">Not a reading list — a set of hands-on skills. Few labs anywhere let one student touch all of these.</span>
+        <span class="zh">這不是一份閱讀清單，而是一套實作技能。很少有實驗室能讓同一位學生接觸到全部這些方法。</span>
+      </p>
+    </div>
+    <div class="techgrid" id="techgrid"></div>
+  </div>
+</section>
+
+<!-- =================== JOIN =================== -->
+<section id="join">
+  <div class="wrap">
+    <div class="joinbox">
+      <h3><span class="en">Who we're looking for</span><span class="zh">我們在找什麼樣的人</span></h3>
+      <p>
+        <span class="en">Curiosity matters more than background. Students here have arrived from psychology, life science, electrical engineering, medicine, physics and sports science — and the mix is the point, because the questions need all of it.</span>
+        <span class="zh">好奇心比背景更重要。本實驗室的成員來自心理學、生命科學、電機、醫學、物理與運動科學——這種混合正是關鍵，因為我們的問題需要所有這些視角。</span>
+      </p>
+      <ul>
+        <li><span class="en"><b>You like puzzles that have an answer.</b> Every question here is settled by an experiment, not by argument.</span>
+            <span class="zh"><b>你喜歡有答案的謎題。</b>這裡的每個問題都靠實驗解決，而不是靠辯論。</span></li>
+        <li><span class="en"><b>You're willing to learn to code.</b> Most of what we do runs on MATLAB or Python. Nobody arrives knowing it; everybody leaves knowing it.</span>
+            <span class="zh"><b>你願意學寫程式。</b>我們的工作多以 MATLAB 或 Python 進行。沒有人是一開始就會的，但每個人離開時都會。</span></li>
+        <li><span class="en"><b>You want your work to reach a patient.</b> Our findings run from a laboratory task to a randomised clinical trial, often within the same project.</span>
+            <span class="zh"><b>你希望研究能真的幫到病人。</b>我們的發現常在同一個計畫中，從實驗室作業一路走到隨機臨床試驗。</span></li>
+      </ul>
+      <p style="margin-bottom:6px"><span class="en">Write to us — tell us which of the four experiments above you found most interesting, and why.</span>
+        <span class="zh">寫信給我們——告訴我們上面四個實驗中你覺得哪一個最有趣，以及為什麼。</span></p>
+      <a class="mail" href="mailto:chijuan@cc.ncu.edu.tw">chijuan@cc.ncu.edu.tw</a>
+      <p style="margin-top:14px;font-size:13.4px">
+        <span class="en">Institute of Cognitive Neuroscience &amp; Cognitive Intelligence and Precision Healthcare Research Center, National Central University, Taoyuan, Taiwan.</span>
+        <span class="zh">國立中央大學 認知神經科學研究所暨認知智慧與精準健康研究中心，桃園，台灣。</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <span class="en">Built from the lab's published record (145 journal articles, 2000–2026). The experiments are simplified teaching versions of published paradigms; they are not diagnostic and produce no clinical information. Illustrative figures are labelled as such.</span>
+      <span class="zh">本網頁內容取自實驗室已發表之著作（2000–2026 年，145 篇期刊論文）。文中實驗為已發表典範之簡化教學版本，不具診斷效力，亦不產生任何臨床資訊。示意圖表均已標示。</span>
+    </p>
+  </div>
+</footer>
+
+<!-- =================== MODAL =================== -->
+<div class="modal" id="modal">
+  <div class="sheet">
+    <div class="sheethead">
+      <h3 id="mtitle"></h3>
+      <button class="closebtn" onclick="closeModal()">×</button>
+    </div>
+    <div class="sheetbody">
+      <div class="stage" id="stage"></div>
+      <div class="progbar"><i id="prog"></i></div>
+      <div id="below"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==================================================================
+   PAPERS DATA
+================================================================== */
+const PAPERS = [{"filename": "2025_Amplitude modulated gamma oscillations as electrophysiological markers for repetitive transcranial magnetic stimulation efficacy in treatment-resistant depression a randomized sham-controlled study..pdf", "year": 2025, "title": "Amplitude modulated gamma oscillations as electrophysiological markers for repetitive transcranial magnetic stimulation efficacy in treatment-resistant depression a randomized sham-controlled study.", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["TMS", "EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2025_Attentional dysfunction arises from right frontocentral and occipital network connectivity in Parkinson_s disease..pdf", "year": 2025, "title": "Attentional dysfunction arises from right frontocentral and occipital network connectivity in Parkinson_s disease.", "isChinese": false, "categories": ["attention", "clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2025_Oscillatory Transcranial Electrical Stimulation and the Amplitude-Modulated Frequency Dictate the Quantitative Features of Phosphenes..pdf", "year": 2025, "title": "Oscillatory Transcranial Electrical Stimulation and the Amplitude-Modulated Frequency Dictate the Quantitative Features of Phosphenes.", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2025_Resolving Transient Neurophysiological Signals and Their Interactions with Adaptive Time-Frequency Analysis..pdf", "year": 2025, "title": "Resolving Transient Neurophysiological Signals and Their Interactions with Adaptive Time-Frequency Analysis.", "isChinese": false, "categories": ["oscillations"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2024_ Improving social cognition following theta burst stimulation over the right inferior frontal gyrus in autism spectrum an 8-week double-blind sham-controlled trial..pdf", "year": 2024, "title": "Improving social cognition following theta burst stimulation over the right inferior frontal gyrus in autism spectrum an 8-week double-blind sham-controlled trial.", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["Behavioral"], "regions": ["rIFG/pre-SMA"]}, {"filename": "2024_Association between physical activity, body composition,and cognitive performance among female office workers.pdf", "year": 2024, "title": "Association between physical activity, body composition,and cognitive performance among female office workers", "isChinese": false, "categories": ["exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2024_Examining the Impact of Transcranial Magnetic Stimulation Intensity on Instantaneous Communication with dynamical EEG analysis..pdf", "year": 2024, "title": "Examining the Impact of Transcranial Magnetic Stimulation Intensity on Instantaneous Communication with dynamical EEG analysis.", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS", "EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2024_Post-stroke upper limb recovery is correlated with dynamic resting-state network connectivity.pdf", "year": 2024, "title": "Post-stroke upper limb recovery is correlated with dynamic resting-state network connectivity", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2024_Predicting sports performance of elite female football players through smart wearable measurement platform.pdf", "year": 2024, "title": "Predicting sports performance of elite female football players through smart wearable measurement platform", "isChinese": false, "categories": ["exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2024_Spatial prediction modulates the rhythm of attentional sampling..pdf", "year": 2024, "title": "Spatial prediction modulates the rhythm of attentional sampling.", "isChinese": false, "categories": ["attention", "oscillations"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2023_A holo-spectral EEG analysis provides an early detection of cognitive decline and predicts the progression to Alzheimer’s disease.pdf", "year": 2023, "title": "A holo-spectral EEG analysis provides an early detection of cognitive decline and predicts the progression to Alzheimer’s disease", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2023_A review of critical brain oscillations in depression and the efficacy of transcranial magnetic stimulation treatment.pdf", "year": 2023, "title": "A review of critical brain oscillations in depression and the efficacy of transcranial magnetic stimulation treatment", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["TMS", "EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2023_Amplitude modulating frequency overrides carrier frequency in tACS‐induced phosphene.pdf", "year": 2023, "title": "Amplitude modulating frequency overrides carrier frequency in tACS‐induced phosphene", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2023_Certain spatial prediction decreases the rhythm of attentional sampling.pdf", "year": 2023, "title": "Certain spatial prediction decreases the rhythm of attentional sampling", "isChinese": false, "categories": ["attention", "oscillations"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2023_Predicting Adverse Recanalization Therapy Outcomes in Acute Ischemic Stroke Patients Using Characteristic Gut Microbiota.pdf", "year": 2023, "title": "Predicting Adverse Recanalization Therapy Outcomes in Acute Ischemic Stroke Patients Using Characteristic Gut Microbiota", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2023_The Association between Electronegative Low-Density Lipoprotein Cholesterol L5 and Cognitive Functions in Patients with Mild Cognitive Impairment.pdf", "year": 2023, "title": "The Association between Electronegative Low-Density Lipoprotein Cholesterol L5 and Cognitive Functions in Patients with Mild Cognitive Impairment", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2023_The association between working memory precision and the nonlinear dynamics of frontal and parieto-occipital EEG activity.pdf", "year": 2023, "title": "The association between working memory precision and the nonlinear dynamics of frontal and parieto-occipital EEG activity", "isChinese": false, "categories": ["memory", "oscillations"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2023_The Prognostic Biomarkers of Plasma Trimethylamine N-Oxide and Short-Chain Fatty Acids for Recanalization Therapy in Acute Ischemic Stroke.pdf", "year": 2023, "title": "The Prognostic Biomarkers of Plasma Trimethylamine N-Oxide and Short-Chain Fatty Acids for Recanalization Therapy in Acute Ischemic Stroke", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2023_The role of carrier spectral composition in the perception of musical pitch..pdf", "year": 2023, "title": "The role of carrier spectral composition in the perception of musical pitch.", "isChinese": false, "categories": ["oscillations"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2022_A checklist for assessing the methodological quality of concurrent tES-fMRI studies (ContES checklist) a consensus study and statement.pdf", "year": 2022, "title": "A checklist for assessing the methodological quality of concurrent tES-fMRI studies (ContES checklist) a consensus study and statement", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2022_Critical role of rhythms in prefrontal transcranial magnetic stimulation for depression A randomized sham-controlled study.pdf", "year": 2022, "title": "Critical role of rhythms in prefrontal transcranial magnetic stimulation for depression A randomized sham-controlled study", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["TMS"], "regions": ["DLPFC"]}, {"filename": "2022_Evaluating the Different Stages of Parkinson’s Disease Using Electroencephalography With Holo-Hilbert Spectral Analysis.pdf", "year": 2022, "title": "Evaluating the Different Stages of Parkinson’s Disease Using Electroencephalography With Holo-Hilbert Spectral Analysis", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2022_Time-frequency-analysis-of-pupil-size-modulated-by-global-luminance-arousal-and-saccade-preparation.pdf", "year": 2022, "title": "Time-frequency-analysis-of-pupil-size-modulated-by-global-luminance-arousal-and-saccade-preparation", "isChinese": false, "categories": ["attention", "oscillations"], "modalities": ["Eye-Tracking"], "regions": ["Cortical Network"]}, {"filename": "chinese_2022_臺灣菁英運動員創造高峰表現之多元影響因素(A multi-perspective investigation of the mechanisms underlying the peak performance of elite athletes in Taiwan.).pdf", "year": 2022, "title": "臺灣菁英運動員創造高峰表現之多元影響因素(A multi-perspective investigation of the mechanisms underlying the peak performance of elite athletes in Taiwan.)", "isChinese": true, "categories": ["exercise"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2021_ Frontoparietal Beta Amplitude Modulation and its Interareal  Cross-frequency Coupling in Visual Working Memory.pdf", "year": 2021, "title": "Frontoparietal Beta Amplitude Modulation and its Interareal  Cross-frequency Coupling in Visual Working Memory", "isChinese": false, "categories": ["memory", "oscillations"], "modalities": ["Behavioral"], "regions": ["PPC"]}, {"filename": "2021_Dynamical EEG Indices of Progressive Motor Inhibition and Error-Monitoring.pdf", "year": 2021, "title": "Dynamical EEG Indices of Progressive Motor Inhibition and Error-Monitoring", "isChinese": false, "categories": ["inhibition"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2021_Efficacy and tolerability of theta-burst stimulation for major depression A systematic review and meta-analysis..pdf", "year": 2021, "title": "Efficacy and tolerability of theta-burst stimulation for major depression A systematic review and meta-analysis.", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["TMS"], "regions": ["Cortical Network"]}, {"filename": "2021_Linking pupil size modulated by global luminance and motor preparation to saccade behavior..pdf", "year": 2021, "title": "Linking pupil size modulated by global luminance and motor preparation to saccade behavior.", "isChinese": false, "categories": ["attention", "oscillations"], "modalities": ["Eye-Tracking"], "regions": ["Cortical Network"]}, {"filename": "2021_Revealing the Dynamic Nature of Amplitude Modulated Neural Entrainment With Holo-Hilbert Spectral Analysis.pdf", "year": 2021, "title": "Revealing the Dynamic Nature of Amplitude Modulated Neural Entrainment With Holo-Hilbert Spectral Analysis", "isChinese": false, "categories": ["oscillations"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2021_Task-Modulated Brain Activity Predicts Antidepressant Responses of Prefrontal Repetitive Transcranial Magnetic Stimulation A Randomized Sham-Control Study.pdf", "year": 2021, "title": "Task-Modulated Brain Activity Predicts Antidepressant Responses of Prefrontal Repetitive Transcranial Magnetic Stimulation A Randomized Sham-Control Study", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["DLPFC"]}, {"filename": "2021_To go or not to go degrees of dynamic inhibitory control revealed by the function of grip force and early electrophysiological indices..pdf", "year": 2021, "title": "To go or not to go degrees of dynamic inhibitory control revealed by the function of grip force and early electrophysiological indices.", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2021_within-cycle-instantaneous-frequency-profiles-report-oscillatory-waveform-dynamics.pdf", "year": 2021, "title": "within-cycle-instantaneous-frequency-profiles-report-oscillatory-waveform-dynamics", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2020_ Early transcranial direct current stimulation treatment exerts neuroprotective effects on 6-OHDA-induced Parkinsonism in rats.pdf", "year": 2020, "title": "Early transcranial direct current stimulation treatment exerts neuroprotective effects on 6-OHDA-induced Parkinsonism in rats", "isChinese": false, "categories": ["clinical"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2020_Antidepressant Efficacy of Prolonged Intermittent Theta Burst Stimulation Monotherapy for Recurrent Depression and Comparison of  Methods for Coil Positioning A Randomized,Double-Blind, Sham-Controll.pdf", "year": 2020, "title": "Antidepressant Efficacy of Prolonged Intermittent Theta Burst Stimulation Monotherapy for Recurrent Depression and Comparison of  Methods for Coil Positioning A Randomized,Double-Blind, Sham-Controll", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2020_exploring-the-impact-of-a-brief-mindfulness-induction-on-motor-inhibitory-control.pdf", "year": 2020, "title": "exploring-the-impact-of-a-brief-mindfulness-induction-on-motor-inhibitory-control", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2020_Neurophysiological signatures of hand motor response to dual-transcranial direct current stimulation in subacute stroke a TMS and MEG study..pdf", "year": 2020, "title": "Neurophysiological signatures of hand motor response to dual-transcranial direct current stimulation in subacute stroke a TMS and MEG study.", "isChinese": false, "categories": ["clinical"], "modalities": ["TMS", "tDCS/tACS", "EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2019_ Human visual steady-state responses to amplitude-modulated  flicker Latency measurement.pdf", "year": 2019, "title": "Human visual steady-state responses to amplitude-modulated  flicker Latency measurement", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2019_ Indices of association between anxiety and mindfulness a guide for future mindfulness studies..pdf", "year": 2019, "title": "Indices of association between anxiety and mindfulness a guide for future mindfulness studies.", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2019_ Low delta and high alpha power are associated with better conflict control and working memory in high  mindfulness, low anxiety individuals.pdf", "year": 2019, "title": "Low delta and high alpha power are associated with better conflict control and working memory in high  mindfulness, low anxiety individuals", "isChinese": false, "categories": ["memory", "inhibition", "oscillations", "clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2019_Neuromodulatory Effects of Transcranial Direct Current Stimulation on Motor Excitability in Rats..pdf", "year": 2019, "title": "Neuromodulatory Effects of Transcranial Direct Current Stimulation on Motor Excitability in Rats.", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2019_Perspective-taking across cultures- shared biases in Taiwanese and British adults.pdf", "year": 2019, "title": "Perspective-taking across cultures- shared biases in Taiwanese and British adults", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2019_Revealing the electrophysiological correlates of working memory-load effects in symmetry span task with HHT method..pdf", "year": 2019, "title": "Revealing the electrophysiological correlates of working memory-load effects in symmetry span task with HHT method.", "isChinese": false, "categories": ["memory", "oscillations"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2019_Unraveling nonlinear electrophysiologic processes in the human visual system with full dimension spectral analysis.pdf", "year": 2019, "title": "Unraveling nonlinear electrophysiologic processes in the human visual system with full dimension spectral analysis", "isChinese": false, "categories": ["oscillations"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2018_Anodal and cathodal tDCS over the right frontal eye fields impacts spatial probability processing differently in pro- and anti-saccades..pdf", "year": 2018, "title": "Anodal and cathodal tDCS over the right frontal eye fields impacts spatial probability processing differently in pro- and anti-saccades.", "isChinese": false, "categories": ["attention"], "modalities": ["tDCS/tACS", "Eye-Tracking"], "regions": ["FEF"]}, {"filename": "2018_Better cognitive performance is associated with the combination of high trait mindfulness and low trait anxiety..pdf", "year": 2018, "title": "Better cognitive performance is associated with the combination of high trait mindfulness and low trait anxiety.", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2018_Effects of prefrontal theta-burst stimulation on brain function in treatment-resistant depression A randomized sham-controlled neuroimaging study..pdf", "year": 2018, "title": "Effects of prefrontal theta-burst stimulation on brain function in treatment-resistant depression A randomized sham-controlled neuroimaging study.", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["TMS"], "regions": ["DLPFC"]}, {"filename": "2018_Meditation effects on the control of involuntary contingent reorienting revealed with electroencephalographic and behavioral evidence..pdf", "year": 2018, "title": "Meditation effects on the control of involuntary contingent reorienting revealed with electroencephalographic and behavioral evidence.", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2018_The critical role of phase difference in theta oscillation between bilateral parietal cortices for visuospatial working memory.pdf", "year": 2018, "title": "The critical role of phase difference in theta oscillation between bilateral parietal cortices for visuospatial working memory", "isChinese": false, "categories": ["memory", "oscillations"], "modalities": ["EEG/MEG"], "regions": ["PPC"]}, {"filename": "2017_Cortical inhibitory and excitatory function in drug naive generalized anxiety disorder.pdf", "year": 2017, "title": "Cortical inhibitory and excitatory function in drug naive generalized anxiety disorder", "isChinese": false, "categories": ["clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2017_Electrophysiological and behavioral evidence reveals the effects of trait anxiety on contingent attentional capture..pdf", "year": 2017, "title": "Electrophysiological and behavioral evidence reveals the effects of trait anxiety on contingent attentional capture.", "isChinese": false, "categories": ["attention", "clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2017_Elucidating and Modulating the Neural Correlates of Visuospatial Working Memory via Noninvasive Brain Stimulation.pdf", "year": 2017, "title": "Elucidating and Modulating the Neural Correlates of Visuospatial Working Memory via Noninvasive Brain Stimulation", "isChinese": false, "categories": ["memory"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2017_Why Do Irrelevant Alternatives Matter An fMRI-TMS Study of Context-Dependent Preferences..pdf", "year": 2017, "title": "Why Do Irrelevant Alternatives Matter An fMRI-TMS Study of Context-Dependent Preferences.", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["Cortical Network"]}, {"filename": "2016_Cognition-Modulated Frontal Activity in Prediction and Augmentation of Antidepressant  Efficacy -  A Randomized Controlled Pilot Study.pdf", "year": 2016, "title": "Cognition-Modulated Frontal Activity in Prediction and Augmentation of Antidepressant  Efficacy -  A Randomized Controlled Pilot Study", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2016_Different forms of prefrontal theta burst stimulation for executive function of medication- resistant depression Evidence from a randomized sham controlled study..pdf", "year": 2016, "title": "Different forms of prefrontal theta burst stimulation for executive function of medication- resistant depression Evidence from a randomized sham controlled study.", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["Behavioral"], "regions": ["DLPFC"]}, {"filename": "2016_Exploring the contributions of the supplementary eye field to subliminal inhibition using double-pulse transcranial magnetic stimulation..pdf", "year": 2016, "title": "Exploring the contributions of the supplementary eye field to subliminal inhibition using double-pulse transcranial magnetic stimulation.", "isChinese": false, "categories": ["inhibition"], "modalities": ["TMS"], "regions": ["FEF"]}, {"filename": "2016_Individual Differences and State-dependent Responses in Transcranial Direct Current Stimulation..pdf", "year": 2016, "title": "Individual Differences and State-dependent Responses in Transcranial Direct Current Stimulation.", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2016_On Holo-Hilbert spectral  analysis a full informational  spectral representation for nonlinear and  non-stationary data.pdf", "year": 2016, "title": "On Holo-Hilbert spectral  analysis a full informational  spectral representation for nonlinear and  non-stationary data", "isChinese": false, "categories": ["oscillations"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2016_Predicting Aggressive Tendencies by Visual Attention Bias Associated with Hostile Emotions..pdf", "year": 2016, "title": "Predicting Aggressive Tendencies by Visual Attention Bias Associated with Hostile Emotions.", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2016_Roles of the pre-SMA and rIFG in conditional stopping revealed by transcranial magnetic stimulation.pdf", "year": 2016, "title": "Roles of the pre-SMA and rIFG in conditional stopping revealed by transcranial magnetic stimulation", "isChinese": false, "categories": ["inhibition"], "modalities": ["TMS"], "regions": ["rIFG/pre-SMA"]}, {"filename": "2016_The critical role of phase difference in gamma oscillation within the temporoparietal network for binding visual working memory..pdf", "year": 2016, "title": "The critical role of phase difference in gamma oscillation within the temporoparietal network for binding visual working memory.", "isChinese": false, "categories": ["memory", "oscillations"], "modalities": ["EEG/MEG"], "regions": ["PPC", "rTPJ"]}, {"filename": "2016_The facilitative effect of transcranial direct current stimulation on visuospatial working memory in patients with diabetic polyneuropathy a pre-post sham-controlled study..pdf", "year": 2016, "title": "The facilitative effect of transcranial direct current stimulation on visuospatial working memory in patients with diabetic polyneuropathy a pre-post sham-controlled study.", "isChinese": false, "categories": ["memory", "clinical"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2016_Theta oscillation reveals the temporal involvement of different attention networks in contingent reorienting..pdf", "year": 2016, "title": "Theta oscillation reveals the temporal involvement of different attention networks in contingent reorienting.", "isChinese": false, "categories": ["attention", "oscillations"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2016_Transcranial Magnetic Stimulation-Derived Motor Parameters and Regional Glucose Metabolism of Motor Cortex..pdf", "year": 2016, "title": "Transcranial Magnetic Stimulation-Derived Motor Parameters and Regional Glucose Metabolism of Motor Cortex.", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["Cortical Network"]}, {"filename": "chinese_2016_網球運動經驗對動作準備歷程的影響( The effect of tennis experience on motor preparation.).pdf", "year": 2016, "title": "網球運動經驗對動作準備歷程的影響( The effect of tennis experience on motor preparation.)", "isChinese": true, "categories": ["exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2015_ A critical role of temporoparietal junction in the integration of top-down and bottom-up attentional control..pdf", "year": 2015, "title": "A critical role of temporoparietal junction in the integration of top-down and bottom-up attentional control.", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["PPC", "rTPJ"]}, {"filename": "2015_Attentional biases to emotion in impulsive and instrumental violent offenders  an event-related potential study.pdf", "year": 2015, "title": "Attentional biases to emotion in impulsive and instrumental violent offenders  an event-related potential study", "isChinese": false, "categories": ["attention", "inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2015_Being watched by others eliminates the effect of emotional arousal on inhibitory control..pdf", "year": 2015, "title": "Being watched by others eliminates the effect of emotional arousal on inhibitory control.", "isChinese": false, "categories": ["inhibition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2015_Blending transcranial direct current stimulations and physical exercise to maximize cognitive improvement..pdf", "year": 2015, "title": "Blending transcranial direct current stimulations and physical exercise to maximize cognitive improvement.", "isChinese": false, "categories": ["exercise"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2015_Brain stimulation improves cognitive control by modulating medial-frontal activity and preSMA-vmPFC functional connectivity..pdf", "year": 2015, "title": "Brain stimulation improves cognitive control by modulating medial-frontal activity and preSMA-vmPFC functional connectivity.", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2015_Dissociated stimulus and response conflict effect in the Stroop task Evidence from evoked brain potentials and brain oscillations..pdf", "year": 2015, "title": "Dissociated stimulus and response conflict effect in the Stroop task Evidence from evoked brain potentials and brain oscillations.", "isChinese": false, "categories": ["inhibition", "oscillations"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2015_Left middle temporal and inferior frontal regions contribute to speed of lexical decision A TMS study..pdf", "year": 2015, "title": "Left middle temporal and inferior frontal regions contribute to speed of lexical decision A TMS study.", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["rIFG/pre-SMA"]}, {"filename": "2015_Modulation of Brain Oscillations during Fundamental Visuo-spatial Processing A Comparison between Female Collegiate Badminton Players and Sedentary Controls..pdf", "year": 2015, "title": "Modulation of Brain Oscillations during Fundamental Visuo-spatial Processing A Comparison between Female Collegiate Badminton Players and Sedentary Controls.", "isChinese": false, "categories": ["oscillations", "exercise"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2015_Regulatory considerations for the clinical and research use of transcranial direct current stimulation (tDCS) Review and recommendations from an expert panel..pdf", "year": 2015, "title": "Regulatory considerations for the clinical and research use of transcranial direct current stimulation (tDCS) Review and recommendations from an expert panel.", "isChinese": false, "categories": ["clinical"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2015_The relationship between the development of response inhibition and intelligence in preschool children..pdf", "year": 2015, "title": "The relationship between the development of response inhibition and intelligence in preschool children.", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2014_ Efficacy of prefrontal theta-burst stimulation in refractory depression a randomized  sham-controlled study.pdf", "year": 2014, "title": "Efficacy of prefrontal theta-burst stimulation in refractory depression a randomized  sham-controlled study", "isChinese": false, "categories": ["oscillations", "clinical"], "modalities": ["TMS"], "regions": ["DLPFC"]}, {"filename": "2014_ Revealing the brain_s adaptability and the transcranial direct current stimulation facilitating effect in inhibitory control by multiscale entropy.pdf", "year": 2014, "title": "Revealing the brain_s adaptability and the transcranial direct current stimulation facilitating effect in inhibitory control by multiscale entropy", "isChinese": false, "categories": ["inhibition", "oscillations"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2014_ The role of superior temporal sulcus in the control of irrelevant emotional face processing A transcranial direct current stimulation study..pdf", "year": 2014, "title": "The role of superior temporal sulcus in the control of irrelevant emotional face processing A transcranial direct current stimulation study.", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2014_Far-space neglect in conjunction but not feature search following transcranial magnetic stimulation over right posterior parietal cortex..pdf", "year": 2014, "title": "Far-space neglect in conjunction but not feature search following transcranial magnetic stimulation over right posterior parietal cortex.", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["PPC"]}, {"filename": "2014_Hand proximity facilitates spatial discrimination of auditory tones..pdf", "year": 2014, "title": "Hand proximity facilitates spatial discrimination of auditory tones.", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2014_Modulating the Interference Effect on Spatial Working Memory by Applying Transcranial Direct Current Stimulation over the Right Dorsolateral Prefrontal Cortex..pdf", "year": 2014, "title": "Modulating the Interference Effect on Spatial Working Memory by Applying Transcranial Direct Current Stimulation over the Right Dorsolateral Prefrontal Cortex.", "isChinese": false, "categories": ["memory"], "modalities": ["tDCS/tACS"], "regions": ["DLPFC"]}, {"filename": "2014_Motor empathy is a consequence of misattribution of sensory information in observers.pdf", "year": 2014, "title": "Motor empathy is a consequence of misattribution of sensory information in observers", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2014_Posterior parietal cortex and visuospatial control in near and far space..pdf", "year": 2014, "title": "Posterior parietal cortex and visuospatial control in near and far space.", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["PPC"]}, {"filename": "2014_The association of physical activity to neural adaptability during visuo-spatial processing in healthy elderly adults A mulitscale entropy analysis..pdf", "year": 2014, "title": "The association of physical activity to neural adaptability during visuo-spatial processing in healthy elderly adults A mulitscale entropy analysis.", "isChinese": false, "categories": ["oscillations", "exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2014_The potential of Transcranial Magnetic Stimulation for population-based application a region-based illustrated brief overview..pdf", "year": 2014, "title": "The potential of Transcranial Magnetic Stimulation for population-based application a region-based illustrated brief overview.", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["Cortical Network"]}, {"filename": "2014_The precuneus and visuospatial attention in near and far space a transcranial magnetic stimulation study..pdf", "year": 2014, "title": "The precuneus and visuospatial attention in near and far space a transcranial magnetic stimulation study.", "isChinese": false, "categories": ["attention"], "modalities": ["TMS"], "regions": ["PPC"]}, {"filename": "2014_The relationship between aerobic fitness and neural oscillations during visuo spatial attention in young adults..pdf", "year": 2014, "title": "The relationship between aerobic fitness and neural oscillations during visuo spatial attention in young adults.", "isChinese": false, "categories": ["attention", "oscillations", "exercise"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2014_Transcranial direct current stimulation over right posterior parietal cortex changes prestimulus alpha oscillation in visual short-term memory task..pdf", "year": 2014, "title": "Transcranial direct current stimulation over right posterior parietal cortex changes prestimulus alpha oscillation in visual short-term memory task.", "isChinese": false, "categories": ["memory", "oscillations"], "modalities": ["tDCS/tACS", "EEG/MEG"], "regions": ["PPC"]}, {"filename": "2014_Voluntarily-generated unimanual preparation is associated with stopping success- evidence from LRP and lateralized mu ERD before the stop signal.pdf", "year": 2014, "title": "Voluntarily-generated unimanual preparation is associated with stopping success- evidence from LRP and lateralized mu ERD before the stop signal", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "chinese_2014_健身運動對動作準備歷程影響(The influence of physical exercise on motor preparatory Processes.).pdf", "year": 2014, "title": "健身運動對動作準備歷程影響(The influence of physical exercise on motor preparatory Processes.)", "isChinese": true, "categories": ["exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "chinese_2014_經顱磁刺激及經顱直流電刺激於認知神經科學與復健醫療之應用(The Application of Transcranial Magnetic Stimulation and Transcranial Direct Current Stimulation in Cognitive Neuroscience and Rehabilitation.).pdf", "year": 2014, "title": "經顱磁刺激及經顱直流電刺激於認知神經科學與復健醫療之應用(The Application of Transcranial Magnetic Stimulation and Transcranial Direct Current Stimulation in Cognitive Neuroscience and Rehabilitation.)", "isChinese": true, "categories": ["clinical"], "modalities": ["TMS", "tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2013_ Right Temporoparietal Junction and Attentional Reorienting.pdf", "year": 2013, "title": "Right Temporoparietal Junction and Attentional Reorienting", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["PPC", "rTPJ"]}, {"filename": "2013_ The Neural Development of Response Inhibition in 5- and 6-Year-Old Preschoolers An ERP and EEG Study.pdf", "year": 2013, "title": "The Neural Development of Response Inhibition in 5- and 6-Year-Old Preschoolers An ERP and EEG Study", "isChinese": false, "categories": ["inhibition"], "modalities": ["EEG/MEG"], "regions": ["Cortical Network"]}, {"filename": "2013_Changes When the Brain Is Stimulated by Current.pdf", "year": 2013, "title": "Changes When the Brain Is Stimulated by Current", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2013_Journal of Motor Behavior_Temporal Preparation in Athletes A Comparison of Tennis Players and Swimmers with Sedentary Controls.pdf", "year": 2013, "title": "Journal of Motor Behavior_Temporal Preparation in Athletes A Comparison of Tennis Players and Swimmers with Sedentary Controls", "isChinese": false, "categories": ["exercise"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2013_PLOS ONE_Open vs. Closed Skill Sports and the Modulation of Inhibitory Control.pdf", "year": 2013, "title": "PLOS ONE_Open vs. Closed Skill Sports and the Modulation of Inhibitory Control", "isChinese": false, "categories": ["inhibition", "exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2013_Temporal preparation in athletes A comparison of tennis players and swimmers with sedentary controls..pdf", "year": 2013, "title": "Temporal preparation in athletes A comparison of tennis players and swimmers with sedentary controls.", "isChinese": false, "categories": ["exercise"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "2013_The Dorsal Attentional System in Oculomotor Learning of Predictive Information..pdf", "year": 2013, "title": "The Dorsal Attentional System in Oculomotor Learning of Predictive Information.", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2013_Virtual Reality in the Neuroscience of Multisensory Integration and Consciousness of Bodily Self.pdf", "year": 2013, "title": "Virtual Reality in the Neuroscience of Multisensory Integration and Consciousness of Bodily Self", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2013_What Can Cognitive Neuroscience Do to Enhance Our Understanding of Education and Learning.pdf", "year": 2013, "title": "What Can Cognitive Neuroscience Do to Enhance Our Understanding of Education and Learning", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "chinese_2013_優秀足球運動員動作控制能力的特性－有氧運動能力的重要性(Characteristics of Inhibitory Motor Control in Elite Soccer Players The Importance of Aerobic Exercise Ability.).pdf", "year": 2013, "title": "優秀足球運動員動作控制能力的特性－有氧運動能力的重要性(Characteristics of Inhibitory Motor Control in Elite Soccer Players The Importance of Aerobic Exercise Ability.)", "isChinese": true, "categories": ["inhibition", "exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "chinese_2013_台灣認知神經科學研究的崛起：以注意力相關研究為例(The Rise of Cognitive Neuroscience in Taiwan A Perspective on Visual Attention Research.).pdf", "year": 2013, "title": "台灣認知神經科學研究的崛起：以注意力相關研究為例(The Rise of Cognitive Neuroscience in Taiwan A Perspective on Visual Attention Research.)", "isChinese": true, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2012_ Brain stimulation and inhibitory control.pdf", "year": 2012, "title": "Brain stimulation and inhibitory control", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2012_ Modulation of motor control in saccadic behaviors by TMS over the posterior  parietal cortex.pdf", "year": 2012, "title": "Modulation of motor control in saccadic behaviors by TMS over the posterior  parietal cortex", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["PPC"]}, {"filename": "2012_Cognition_ Sex differences in how erotic and painful stimuli impair inhibitory control.pdf", "year": 2012, "title": "Cognition_ Sex differences in how erotic and painful stimuli impair inhibitory control", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2012_Investigation of bistable perception with the silhouette spinner Sit still, spin the dancer with your will..pdf", "year": 2012, "title": "Investigation of bistable perception with the silhouette spinner Sit still, spin the dancer with your will.", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2012_lateral-prefrontal-cortex-contributes-to-maladaptive-decisions.pdf", "year": 2012, "title": "lateral-prefrontal-cortex-contributes-to-maladaptive-decisions", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["DLPFC"]}, {"filename": "2012_Neural Mechanisms of Implicit Visual Probability Learning.pdf", "year": 2012, "title": "Neural Mechanisms of Implicit Visual Probability Learning", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2012_Take the matter into your own hands A brief review of the effect of nearby-hands on visual processing.pdf", "year": 2012, "title": "Take the matter into your own hands A brief review of the effect of nearby-hands on visual processing", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2012_Unleashing Potential Transcranial Direct Current Stimulation over the Right Posterior Parietal Cortex  Improves ChangeDetection in Low-Performing Individuals.pdf", "year": 2012, "title": "Unleashing Potential Transcranial Direct Current Stimulation over the Right Posterior Parietal Cortex  Improves ChangeDetection in Low-Performing Individuals", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["PPC"]}, {"filename": "chinese_2012_運動對孩童認知功能及學業表現的影響：文獻回顧與展望(The Effect of Exercise on Cognitive and Academic Performance A Review and Prospect.).pdf", "year": 2012, "title": "運動對孩童認知功能及學業表現的影響：文獻回顧與展望(The Effect of Exercise on Cognitive and Academic Performance A Review and Prospect.)", "isChinese": true, "categories": ["exercise"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2011_ Predictability of Saccadic Behaviors is Modified by Transcranial Magnetic Stimulation Over Human  Posterior Parietal Cortex.pdf", "year": 2011, "title": "Predictability of Saccadic Behaviors is Modified by Transcranial Magnetic Stimulation Over Human  Posterior Parietal Cortex", "isChinese": false, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["PPC"]}, {"filename": "2011_Cereb Cortex__The location probability effects of saccade reaction times are modulated in the frontal eye fields but not in the supplementary eye field.pdf", "year": 2011, "title": "Cereb Cortex__The location probability effects of saccade reaction times are modulated in the frontal eye fields but not in the supplementary eye field", "isChinese": false, "categories": ["attention"], "modalities": ["Eye-Tracking"], "regions": ["FEF"]}, {"filename": "2011_Dissociating the contributions of human frontal eye fields and posterior parietal cortex to visual search.pdf", "year": 2011, "title": "Dissociating the contributions of human frontal eye fields and posterior parietal cortex to visual search", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["FEF", "PPC"]}, {"filename": "2011_Modulating inhibitory control with direct current stimulation of the superior medial  frontal cortex.pdf", "year": 2011, "title": "Modulating inhibitory control with direct current stimulation of the superior medial  frontal cortex", "isChinese": false, "categories": ["inhibition"], "modalities": ["tDCS/tACS"], "regions": ["rIFG/pre-SMA"]}, {"filename": "2011_Probabilities in implicit learning.pdf", "year": 2011, "title": "Probabilities in implicit learning", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2011_The Benefit of Object Interactions Arises in the Lateral Occipital Cortex Independent of Attentional Modulation from the Intraparietal Sulcus A Transcranial Magnetic Stimulation Study.pdf", "year": 2011, "title": "The Benefit of Object Interactions Arises in the Lateral Occipital Cortex Independent of Attentional Modulation from the Intraparietal Sulcus A Transcranial Magnetic Stimulation Study", "isChinese": false, "categories": ["attention"], "modalities": ["TMS"], "regions": ["PPC"]}, {"filename": "2011_Trial type probability modulates the cost of antisaccades.pdf", "year": 2011, "title": "Trial type probability modulates the cost of antisaccades", "isChinese": false, "categories": ["attention"], "modalities": ["tDCS/tACS", "Eye-Tracking"], "regions": ["Cortical Network"]}, {"filename": "chinese_2011_以認知神經科學取向探討兒童注意力的發展和學習之關聯(The relationship between development of attention and learning in children A cognitive neuroscience approach.).pdf", "year": 2011, "title": "以認知神經科學取向探討兒童注意力的發展和學習之關聯(The relationship between development of attention and learning in children A cognitive neuroscience approach.)", "isChinese": true, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2010_ Human frontal eye fields and target switching.pdf", "year": 2010, "title": "Human frontal eye fields and target switching", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["FEF"]}, {"filename": "2010_Antisaccade Cost Is Modulated by Contextual Experience of Location Probability.pdf", "year": 2010, "title": "Antisaccade Cost Is Modulated by Contextual Experience of Location Probability", "isChinese": false, "categories": ["attention"], "modalities": ["Eye-Tracking"], "regions": ["Cortical Network"]}, {"filename": "2010_Inhibitory Control and the Frontal Eye Fields.pdf", "year": 2010, "title": "Inhibitory Control and the Frontal Eye Fields", "isChinese": false, "categories": ["attention", "inhibition"], "modalities": ["Behavioral"], "regions": ["FEF"]}, {"filename": "2010_Posterior parietal cortex mediates encoding and maintenance processes in change blindness.pdf", "year": 2010, "title": "Posterior parietal cortex mediates encoding and maintenance processes in change blindness", "isChinese": false, "categories": ["cognition"], "modalities": ["tDCS/tACS"], "regions": ["PPC"]}, {"filename": "2010_The location probability effects of saccade reaction times are modulated in the Frontal Eye Fields but not in the Supplementary Eye Field..pdf", "year": 2010, "title": "The location probability effects of saccade reaction times are modulated in the Frontal Eye Fields but not in the Supplementary Eye Field.", "isChinese": false, "categories": ["attention"], "modalities": ["Eye-Tracking"], "regions": ["FEF"]}, {"filename": "2010_The Perseverance of Numerical Distance Effect in Attentional Blink..pdf", "year": 2010, "title": "The Perseverance of Numerical Distance Effect in Attentional Blink.", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2010_The perseverance of numerical distance effect in attentional blink.pdf", "year": 2010, "title": "The perseverance of numerical distance effect in attentional blink", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2009_Control of prepotent responses by the superior medial frontal cortex.pdf", "year": 2009, "title": "Control of prepotent responses by the superior medial frontal cortex", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["rIFG/pre-SMA"]}, {"filename": "2008_ Segregation of Visual Selection and Saccades in Human Frontal Eye Fields.pdf", "year": 2008, "title": "Segregation of Visual Selection and Saccades in Human Frontal Eye Fields", "isChinese": false, "categories": ["attention"], "modalities": ["Eye-Tracking"], "regions": ["FEF"]}, {"filename": "2008_The timing of the involvement of the frontal.pdf", "year": 2008, "title": "The timing of the involvement of the frontal", "isChinese": false, "categories": ["cognition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2008_Time pressure leads to inhibitory control deficits in impulsive violent offenders.pdf", "year": 2008, "title": "Time pressure leads to inhibitory control deficits in impulsive violent offenders", "isChinese": false, "categories": ["inhibition"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2005_ Neural correlates of impulsive-violent behavior an event-related potential study.pdf", "year": 2005, "title": "Neural correlates of impulsive-violent behavior an event-related potential study", "isChinese": false, "categories": ["inhibition"], "modalities": ["tDCS/tACS"], "regions": ["Cortical Network"]}, {"filename": "chinese_2005_視覺注意力的研究議題與神經生理機制(A brief review on visual selective attention.).pdf", "year": 2005, "title": "視覺注意力的研究議題與神經生理機制(A brief review on visual selective attention.)", "isChinese": true, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "chinese_2005_跨顱磁刺激在認知神經科學研究的角色(The application of Transcranial Magnetic Stimulation in Cognitive Neuroscience.).pdf", "year": 2005, "title": "跨顱磁刺激在認知神經科學研究的角色(The application of Transcranial Magnetic Stimulation in Cognitive Neuroscience.)", "isChinese": true, "categories": ["cognition"], "modalities": ["TMS"], "regions": ["Cortical Network"]}, {"filename": "2004_Cortical interactions in vision and awareness hierarchies in reverse.pdf", "year": 2004, "title": "Cortical interactions in vision and awareness hierarchies in reverse", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2004_Dissociation of spatial attention and  saccade preparation.pdf", "year": 2004, "title": "Dissociation of spatial attention and  saccade preparation", "isChinese": false, "categories": ["attention"], "modalities": ["Eye-Tracking"], "regions": ["Cortical Network"]}, {"filename": "2004_Effects of Search Efficiency on Surround Suppression During Visual  Selection in Frontal Eye Field.pdf", "year": 2004, "title": "Effects of Search Efficiency on Surround Suppression During Visual  Selection in Frontal Eye Field", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["FEF"]}, {"filename": "2004_Neural Basis of Saccade Selection & Control.pdf", "year": 2004, "title": "Neural Basis of Saccade Selection & Control", "isChinese": false, "categories": ["attention"], "modalities": ["Eye-Tracking"], "regions": ["Cortical Network"]}, {"filename": "2003_ Feedback to V1 a reverse hierarchy in vision.pdf", "year": 2003, "title": "Feedback to V1 a reverse hierarchy in vision", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}, {"filename": "2003_Human Frontal Eye Fields and Visual Search.pdf", "year": 2003, "title": "Human Frontal Eye Fields and Visual Search", "isChinese": false, "categories": ["attention"], "modalities": ["Behavioral"], "regions": ["FEF"]}, {"filename": "2000_Suppression of vision by transcranial magnetic stimulation a third mechanism.pdf", "year": 2000, "title": "Suppression of vision by transcranial magnetic stimulation a third mechanism", "isChinese": false, "categories": ["attention"], "modalities": ["TMS"], "regions": ["Cortical Network"]}, {"filename": "chinese_1995_阮啓弘_提示性訊息對巴金森氏症患者執行功能影響之研究。高雄醫學院行為科學研究所碩士論文。.pdf", "year": 1995, "title": "阮啓弘_提示性訊息對巴金森氏症患者執行功能影響之研究。高雄醫學院行為科學研究所碩士論文。", "isChinese": true, "categories": ["inhibition", "clinical"], "modalities": ["Behavioral"], "regions": ["Cortical Network"]}];
+
+/* ==================================================================
+   BRAIN REGIONS DATA (RIGHT HEMISPHERE LATERAL VIEW)
+================================================================== */
+const REGIONS_DATA = {
+  'FEF': {
+    name: {en: 'Right Frontal Eye Fields (FEF)', zh: '右額葉眼動區 (FEF)'},
+    tag: 'Right Dorsolateral Frontal · Saccades & Attention',
+    desc: {
+      en: 'Located in the right hemisphere at the junction of the precentral and superior frontal sulcus (BA 8). Crucial node for oculomotor control and covert visual spatial attention. Lab studies demonstrated that spatial attention and saccade preparation are dissociable in human FEF, and FEF is causally required for hard conjunction visual search.',
+      zh: '位於右半腦前中央溝與上額溝交界（Brodmann 第 8 區）。眼動控制與隱性視覺空間注意力的關鍵節點。實驗室研究證實空間注意力與眼動準備在 FEF 是可分離的，且 FEF 為困難結合搜尋的因果必要腦區。'
+    },
+    tech: ['Single-pulse TMS', 'Double-pulse TMS', 'tDCS', 'Eye-Tracking'],
+    paperQuery: 'FEF'
+  },
+  'pre-SMA': {
+    name: {en: 'Pre-Supplementary Motor Area (pre-SMA)', zh: '前運動輔助區 (pre-SMA)'},
+    tag: 'Superior Dorsomedial Frontal · Response Inhibition',
+    desc: {
+      en: 'Situated along the superior dorsomedial frontal cortex at roughly the same anteroposterior level as the FEF. Implements the early braking signal in the stop-signal task, sending executive control signals to downstream subcortical structures.',
+      zh: '位於上內側額葉皮質最高點（與 FEF 位居相同的前後軸層次）。在停止訊號作業中執行早期的大腦煞車訊號，將控制訊號下傳至皮質下結構。'
+    },
+    tech: ['TMS', 'tDCS', 'High-density EEG', 'Grip-Force Sensing'],
+    paperQuery: 'pre-SMA'
+  },
+  'rIFG': {
+    name: {en: 'Right Inferior Frontal Gyrus (rIFG)', zh: '右下額迴 (rIFG)'},
+    tag: 'Right Ventrolateral Prefrontal · Motor Suppression',
+    desc: {
+      en: 'Located in the right ventrolateral prefrontal cortex (pars opercularis/triangularis). Acts as the final cortical execution node for motor suppression and response inhibition during cognitive control tasks.',
+      zh: '位於右腹外側前額葉皮質（BA 44/45）。作為認知控制與動作抑制的最終皮質執行節點。'
+    },
+    tech: ['rTMS', 'tDCS', 'ERP / EEG', 'TMS-fMRI'],
+    paperQuery: 'inhibition'
+  },
+  'PPC': {
+    name: {en: 'Right Posterior Parietal Cortex (rPPC)', zh: '右後頂葉皮質 (rPPC)'},
+    tag: 'Right Dorsal Parietal · Working Memory Storage',
+    desc: {
+      en: 'Right superior/inferior parietal lobule (BA 7/40). Key region for visuospatial working memory storage, change detection, and spatial reorienting. Lab research showed tDCS over right PPC selectively boosted VWM capacity in lower-performing individuals.',
+      zh: '右後頂葉皮質（BA 7/40）。視覺空間工作記憶儲存與改變偵測的核心區域。實驗室研究發現右頂葉 tDCS 可選擇性提升低容量者的工作記憶。'
+    },
+    tech: ['tDCS', 'TMS', 'EEG Gamma/Beta Oscillations'],
+    paperQuery: 'PPC'
+  },
+  'DLPFC': {
+    name: {en: 'Right Dorsolateral Prefrontal Cortex (DLPFC)', zh: '右背外側額葉皮質 (DLPFC)'},
+    tag: 'Right Middle Frontal Gyrus · Executive Control',
+    desc: {
+      en: 'Right middle frontal gyrus (BA 9/46). Central hub for executive control and major clinical target for repetitive TMS (rTMS) and intermittent Theta Burst Stimulation (iTBS) in treatment-resistant depression.',
+      zh: '右中額迴（BA 9/46）。執行控制的中樞，也是難治型憂鬱症進行重複穿顱磁刺激 (rTMS) 與 θ 叢集刺激 (iTBS) 的主要臨床標的。'
+    },
+    tech: ['rTMS', 'iTBS', 'tDCS', 'fMRI-TMS'],
+    paperQuery: 'depression'
+  },
+  'rTPJ': {
+    name: {en: 'Right Temporoparietal Junction (rTPJ)', zh: '右側顳頂交界處 (rTPJ)'},
+    tag: 'Right Temporoparietal · Attentional Reorienting',
+    desc: {
+      en: 'Located at the junction of right posterior superior temporal gyrus and inferior parietal lobule (BA 39/40). Integrates top-down goal-driven and bottom-up stimulus-driven attention, perspective-taking, and social cognition.',
+      zh: '位於右側上顳迴與下頂葉交界處（BA 39/40）。整合由上而下的目標導向與由下而上的刺激驅動注意力，並參與社交認知調變。'
+    },
+    tech: ['TMS', 'Theta Oscillations', 'TBS Trial'],
+    paperQuery: 'rTPJ'
+  }
+};
+
+/* ==================================================================
+   i18n & LANG
+================================================================== */
+let LANG = 'en';
+function applyLangVisibility(){
+  document.querySelectorAll('.en, .zh').forEach(el => {
+    const isZh = el.classList.contains('zh');
+    el.style.display = ((LANG === 'zh') === isZh) ? '' : 'none';
+  });
+}
+function setLang(l){
+  LANG = l;
+  document.body.classList.toggle('lang-zh', l === 'zh');
+  document.getElementById('btn-en').classList.toggle('on', l === 'en');
+  document.getElementById('btn-zh').classList.toggle('on', l === 'zh');
+  document.documentElement.lang = (l === 'zh' ? 'zh-TW' : 'en');
+  renderCards(); renderThemes(); renderTech(); renderImpact(); renderBrainInfo(); filterPapers();
+  applyLangVisibility();
+  if (modalOpen) closeModal();
+}
+const t = o => o[LANG];
+
+/* ==================================================================
+   BRAIN MAP SELECTOR
+================================================================== */
+let selectedRegionKey = 'FEF';
+function selectRegion(key){
+  selectedRegionKey = key;
+  const safeId = key.replace('/', '-');
+  
+  document.querySelectorAll('.brain-node').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.brain-tab-btn').forEach(b => b.classList.remove('active'));
+  
+  const targetNode = document.getElementById('node-' + safeId);
+  if(targetNode) targetNode.classList.add('active');
+  
+  const targetBtn = document.getElementById('tab-' + safeId);
+  if(targetBtn) targetBtn.classList.add('active');
+  
+  renderBrainInfo();
+}
+
+function matchPaperText(p, q){
+  if(!q) return true;
+  const ql = q.toLowerCase().trim();
+  
+  let synonyms = [ql];
+  if(ql === 'fef' || ql === 'frontal eye' || ql === 'frontal eye fields'){
+    synonyms = ['fef', 'frontal eye', 'eye field', 'eye-field', 'saccade', 'oculomotor'];
+  } else if(ql === 'pre-sma' || ql === 'presma' || ql === 'supplementary motor'){
+    synonyms = ['pre-sma', 'presma', 'sma', 'medial frontal', 'superior medial', 'motor preparation'];
+  } else if(ql === 'rifg' || ql === 'ifg' || ql === 'inferior frontal'){
+    synonyms = ['rifg', 'ifg', 'inferior frontal', 'inhibit', 'stop', 'ssrt', 'brake', 'go/no-go'];
+  } else if(ql === 'ppc' || ql === 'parietal' || ql === 'rppc'){
+    synonyms = ['ppc', 'parietal', 'posterior parietal', 'vwm', 'working memory', 'change detection'];
+  } else if(ql === 'dlpfc' || ql === 'depression' || ql === 'rtms' || ql === 'itbs'){
+    synonyms = ['dlpfc', 'prefrontal', 'depression', 'depress', 'rtms', 'itbs', 'theta-burst', 'refractory'];
+  } else if(ql === 'rtpj' || ql === 'tpj' || ql === 'temporoparietal'){
+    synonyms = ['tpj', 'temporoparietal', 'social', 'autism', 'reorienting'];
+  }
+
+  const combined = (
+    p.title + ' ' +
+    p.filename + ' ' +
+    p.year + ' ' +
+    (p.regions || []).join(' ') + ' ' +
+    (p.categories || []).join(' ') + ' ' +
+    (p.modalities || []).join(' ')
+  ).toLowerCase();
+
+  return synonyms.some(syn => combined.includes(syn));
+}
+
+function renderBrainInfo(){
+  const info = REGIONS_DATA[selectedRegionKey] || REGIONS_DATA['FEF'];
+  const matchingList = PAPERS.filter(p => matchPaperText(p, info.paperQuery));
+  
+  document.getElementById('brain-info-panel').innerHTML = `
+    <span class="region-tag">${info.tag}</span>
+    <h3>${t(info.name)}</h3>
+    <p>${t(info.desc)}</p>
+    
+    <div style="font-size:12px;font-weight:700;color:var(--grey);margin-bottom:6px">${LANG==='en'?'Modalities &amp; Techniques Used:':'使用之腦刺激與量測技術：'}</div>
+    <div class="tech-pills">
+      ${info.tech.map(tc => `<span class="tech-pill">${tc}</span>`).join('')}
+    </div>
+
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:13px;color:var(--navy);font-weight:700">${matchingList.length} ${LANG==='en'?'matching papers':'篇相關論文'}</span>
+      <button class="filter-region-btn" onclick="filterByRegionQuery('${info.paperQuery}')">
+        ${LANG==='en'?'Search Papers for this Region →':'檢索此區域論文 →'}
+      </button>
+    </div>
+  `;
+}
+
+function filterByRegionQuery(q){
+  activeTopicFilter = 'all';
+  activeModFilter = 'all';
+  document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('#topic-pills .pill-btn').classList.add('active');
+  document.querySelector('#mod-pills .pill-btn').classList.add('active');
+  
+  document.getElementById('lib-search-input').value = q;
+  filterPapers();
+  document.getElementById('library').scrollIntoView({behavior:'smooth'});
+}
+
+/* ==================================================================
+   PUBLICATION LIBRARY ENGINE
+================================================================== */
+let activeTopicFilter = 'all';
+let activeModFilter = 'all';
+
+function setTopicFilter(tp){
+  activeTopicFilter = tp;
+  document.querySelectorAll('#topic-pills .pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick').includes("'" + tp + "'"));
+  });
+  filterPapers();
+}
+
+function setModFilter(md){
+  activeModFilter = md;
+  document.querySelectorAll('#mod-pills .pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick').includes("'" + md + "'"));
+  });
+  filterPapers();
+}
+
+function resetAllFilters(){
+  activeTopicFilter = 'all';
+  activeModFilter = 'all';
+  document.getElementById('lib-search-input').value = '';
+  document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('#topic-pills .pill-btn').classList.add('active');
+  document.querySelector('#mod-pills .pill-btn').classList.add('active');
+  filterPapers();
+}
+
+function filterPapers(){
+  const query = document.getElementById('lib-search-input').value.toLowerCase().trim();
+  
+  const filtered = PAPERS.filter(p => {
+    // Topic filter
+    if(activeTopicFilter === 'chinese' && !p.isChinese) return false;
+    if(activeTopicFilter !== 'all' && activeTopicFilter !== 'chinese' && !p.categories.includes(activeTopicFilter)) return false;
+    
+    // Modality filter
+    if(activeModFilter !== 'all' && !p.modalities.includes(activeModFilter)) return false;
+    
+    // Text query with synonym expansion
+    if(query && !matchPaperText(p, query)) return false;
+    
+    return true;
+  });
+
+  renderPaperGrid(filtered);
+
+  // Status text
+  const isFiltered = query || activeTopicFilter !== 'all' || activeModFilter !== 'all';
+  document.getElementById('reset-filters-btn').style.display = isFiltered ? 'inline-block' : 'none';
+  document.getElementById('lib-count-text').textContent = 
+    LANG==='en' ? `Showing ${filtered.length} of ${PAPERS.length} papers` : `顯示 ${filtered.length} 篇（共 ${PAPERS.length} 篇論文）`;
+}
+
+function renderPaperGrid(list){
+  const grid = document.getElementById('paper-grid');
+  if(!list.length){
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--grey);background:#fff;border-radius:12px;border:1px solid var(--line)">
+      <div style="font-size:24px;margin-bottom:8px">🔍</div>
+      <b>${LANG==='en'?'No papers found matching your query':'未找到符合條件的論文'}</b>
+      <p style="font-size:13px;margin-top:4px">${LANG==='en'?'Try resetting your filters or adjusting your search term.':'請嘗試重設篩選條件或更改搜尋關鍵字。'}</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(p => {
+    const encodedFn = encodeURIComponent(p.filename);
+    const safeAttr = p.filename.replace(/"/g, '&quot;');
+    return `
+    <div class="paper-card">
+      <div class="card-top">
+        <span class="paper-yr">${p.year}</span>
+        <span class="paper-lang">${p.isChinese?'中文':'EN'}</span>
+      </div>
+      <div class="paper-title">${p.title}</div>
+      <div class="paper-tags">
+        ${p.categories.map(c => `<span class="tag">${c}</span>`).join('')}
+        ${p.modalities.map(m => `<span class="tag modality">${m}</span>`).join('')}
+        ${p.regions.map(r => `<span class="tag region">${r}</span>`).join('')}
+      </div>
+      <a class="pdf-btn" href="./${encodedFn}" target="_blank" download="${safeAttr}">
+        📄 ${LANG==='en'?'Read / Download PDF':'閱讀 / 下載 PDF'} →
+      </a>
+    </div>
+  `}).join('');
+}
+
+/* ==================================================================
+   CONTENT & EXPERIMENTS (Preserved fully)
+================================================================== */
+const EXPERIMENTS = [
+  { id:'vwm', color:'var(--teal)', bg:'var(--tealL)',
+    tag:{en:'Working memory · PPC',zh:'工作記憶 · 頂葉'},
+    name:{en:'How much can you hold in mind?',zh:'你的腦中能同時裝下幾樣東西？'},
+    blurb:{en:'Coloured squares flash up and vanish. One may have changed. Your score is a real capacity estimate — the same number we publish.',
+           zh:'彩色方塊閃現後消失，其中一個可能變了色。你得到的分數是真正的容量估計值——與我們論文中使用的指標相同。'},
+    mins:{en:'~3 min · 36 trials',zh:'約 3 分鐘 · 36 個嘗試'} },
+  { id:'ssrt', color:'var(--coral)', bg:'var(--coralL)',
+    tag:{en:'Cognitive control · pre-SMA / rIFG',zh:'認知控制 · 前運動輔助區/右下額迴'},
+    name:{en:'How fast can you stop?',zh:'你能多快把動作煞住？'},
+    blurb:{en:'Respond fast to arrows — except when the stop signal appears. We measure the speed of the brake itself, in milliseconds.',
+           zh:'看到箭頭要盡快反應——但出現停止訊號時必須忍住。我們量的是「煞車」本身的速度，單位是毫秒。'},
+    mins:{en:'~4 min · 64 trials',zh:'約 4 分鐘 · 64 個嘗試'} },
+  { id:'search', color:'var(--gold)', bg:'var(--goldL)',
+    tag:{en:'Visual attention · FEF',zh:'視覺注意力 · 額葉眼動區'},
+    name:{en:'Why is finding your keys hard?',zh:'為什麼找鑰匙這麼難？'},
+    blurb:{en:'Find the target among distractors. Two kinds of search — one your brain does in parallel, one it must do item by item. You will feel the difference.',
+           zh:'在干擾物中找出目標。兩種搜尋方式——一種大腦可以平行處理，另一種必須逐一檢查。你會親身感受到差別。'},
+    mins:{en:'~4 min · 48 trials',zh:'約 4 分鐘 · 48 個嘗試'} },
+  { id:'sample', color:'var(--sage)', bg:'var(--sageL)',
+    tag:{en:'Attention over time · rTPJ',zh:'注意力的時間結構 · 右顳頂交界'},
+    name:{en:'Does attention blink?',zh:'注意力會「閃爍」嗎？'},
+    blurb:{en:'A faint target appears at an unpredictable moment. Attention is not a steady spotlight — it samples the world rhythmically. Here is how we found that out.',
+           zh:'一個微弱的目標會在無法預期的時刻出現。注意力並非穩定的聚光燈——它以節律的方式取樣外界。這就是我們如何發現它的。'},
+    mins:{en:'~3 min · 60 trials',zh:'約 3 分鐘 · 60 個嘗試'} },
+];
+
+const THEMES = [
+  { c:'var(--teal)', yrs:'2000–2026',
+    h:{en:'Attention and the frontal eye fields',zh:'注意力與額葉眼動區'},
+    p:{en:'Where in the brain does "look there" separate from "attend there"? We used TMS to take each node offline and watch what broke.',
+       zh:'大腦中「看向那裡」與「注意那裡」在哪裡分家？我們用穿顱磁刺激讓每個節點暫時失效，觀察什麼壞掉了。'},
+    li:[
+      {en:'<b>Spatial attention and saccade preparation are separable</b> in the frontal eye fields — a dissociation shown in monkey FEF and later in humans. <i>PNAS 2004; Cerebral Cortex 2008</i>',
+       zh:'<b>空間注意力與眼動準備在額葉眼動區是可分離的</b>——先在猴子 FEF 證實，後於人類重現。<i>PNAS 2004；Cerebral Cortex 2008</i>'},
+      {en:'<b>The frontal eye fields are needed for hard visual search</b>, not easy search — TMS there impairs conjunction search specifically. <i>J Neurophysiology 2003</i>',
+       zh:'<b>額葉眼動區只在困難搜尋時是必要的</b>——TMS 特別損害結合特徵搜尋。<i>J Neurophysiology 2003</i>'},
+      {en:'<b>The right temporoparietal junction reorients attention</b> and integrates goal-driven with stimulus-driven control. <i>Human Brain Mapping 2013</i>',
+       zh:'<b>右側顳頂交界處負責注意力的重新導向</b>，並整合目標導向與刺激驅動的控制。<i>Human Brain Mapping 2013</i>'},
+    ]},
+  { c:'var(--navy)', yrs:'2010–2026',
+    h:{en:'Working memory, and how to enlarge it',zh:'工作記憶，以及如何擴充它'},
+    p:{en:'Capacity looks fixed. It is not — but who gains depends on where they start.',
+       zh:'容量看似固定，其實不然——但誰能獲益，取決於他原本的起點。'},
+    li:[
+      {en:'<b>Electrical stimulation of the right parietal cortex improved memory — but only in people who started low.</b> High performers gained nothing. <i>J Neuroscience 2012</i>',
+       zh:'<b>右頂葉電刺激提升了記憶表現——但只出現在原本表現較差的人身上。</b>表現好的人毫無獲益。<i>J Neuroscience 2012</i>'},
+      {en:'<b>The timing between two brain regions matters more than the strength of either.</b> Stimulating two parietal sites in anti-phase helped; in phase, it did not. <i>Scientific Reports 2016, 2018</i>',
+       zh:'<b>兩個腦區之間的「時序」比任一區的強度更重要。</b>反相位刺激兩個頂葉部位有效；同相位則無效。<i>Scientific Reports 2016、2018</i>'},
+      {en:'<b>Memory precision is predicted by how brain rhythms rise and fall</b> — the envelope, not the raw power. <i>Scientific Reports 2023</i>',
+       zh:'<b>記憶的精確度可由腦波振幅的起伏（包絡）預測</b>，而非原始功率。<i>Scientific Reports 2023</i>'},
+    ]},
+  { c:'var(--coral)', yrs:'2005–2026',
+    h:{en:'Inhibitory control — the brain brake',zh:'抑制控制——大腦的煞車'},
+    p:{en:'Stopping is not the absence of action. It is an action of its own, with its own circuit and its own timing.',
+       zh:'「停止」不是沒有動作，它本身就是一個動作，有自己的神經迴路與時間結構。'},
+    li:[
+      {en:'<b>Pre-SMA and right inferior frontal gyrus jointly implement stopping</b>, shown by taking each offline with TMS. <i>Behavioural Brain Research 2016</i>',
+       zh:'<b>前運動輔助區與右下額迴共同執行「停止」</b>，以 TMS 逐一停用各區證實。<i>Behavioural Brain Research 2016</i>'},
+      {en:'<b>Stimulation over medial frontal cortex made people better at stopping</b> — one of the earliest demonstrations that control can be improved, not just measured. <i>NeuroImage 2011</i>',
+       zh:'<b>刺激內側額葉皮質可讓人更善於「停止」</b>——這是最早證明控制能力可被提升、而不只是被測量的研究之一。<i>NeuroImage 2011</i>'},
+      {en:'<b>Impulsive violent offenders show a specific deficit under time pressure</b>, visible in their brain responses before their behaviour. <i>Behavioural Brain Research 2008</i>',
+       zh:'<b>衝動型暴力犯在時間壓力下呈現特定缺損</b>，其腦波反應早於行為顯現。<i>Behavioural Brain Research 2008</i>'},
+    ]},
+  { c:'var(--gold)', yrs:'2013–2026',
+    h:{en:'Nonlinear brain dynamics',zh:'非線性腦動態'},
+    p:{en:'Standard analysis assumes brain waves are steady sine waves. They are not — and what that assumption throws away turns out to be the useful part.',
+       zh:'傳統分析假設腦波是穩定的正弦波，事實並非如此——而被這個假設丟掉的部分，恰好是最有用的。'},
+    li:[
+      {en:'<b>Holo-Hilbert spectral analysis</b>, co-developed here, recovers how fast rhythms are modulated by slow ones — a dimension Fourier analysis converts into artefacts. <i>Phil Trans R Soc A 2016</i>',
+       zh:'<b>全希爾伯特頻譜分析（HHSA）</b>由本團隊共同開發，可還原快速節律如何被慢速節律調變——這正是傅立葉分析會轉為假影的維度。<i>Phil Trans R Soc A 2016</i>'},
+      {en:'<b>Brain signal complexity predicts who benefits from stimulation.</b> Successful stopping produces more complex signals than failed stopping. <i>NeuroImage 2014</i>',
+       zh:'<b>腦訊號的複雜度可預測誰會從刺激中獲益。</b>成功停止的訊號比失敗停止更複雜。<i>NeuroImage 2014</i>'},
+      {en:'<b>Attention samples the world rhythmically</b>, and knowing where something will appear changes that rhythm. <i>Cerebral Cortex 2024</i>',
+       zh:'<b>注意力以節律方式取樣外界</b>，而事先知道目標會出現在哪裡，會改變這個節律。<i>Cerebral Cortex 2024</i>'},
+    ]},
+  { c:'var(--sage)', yrs:'2013–2026',
+    h:{en:'Exercise as brain intervention',zh:'運動作為大腦介入'},
+    p:{en:'The most scalable way to change a brain may not involve any equipment at all.',
+       zh:'改變大腦最可推廣的方式，也許根本不需要任何儀器。'},
+    li:[
+      {en:'<b>Open-skill athletes (badminton, tennis) show better inhibitory control than closed-skill athletes</b> matched for fitness — the sport cognitive demand matters, not just the exercise. Our most-cited paper. <i>PLoS ONE 2013</i>',
+       zh:'<b>開放性技能運動員（羽球、網球）的抑制控制優於體能相當的封閉性技能運動員</b>——關鍵在運動的認知需求，而不只是運動本身。這是我們被引用最多的論文。<i>PLoS ONE 2013</i>'},
+      {en:'<b>Physical activity predicts greater neural adaptability in older adults</b>, measured as signal complexity during visuospatial processing. <i>Brain and Cognition 2014</i>',
+       zh:'<b>身體活動可預測年長者更高的神經適應力</b>，以視覺空間處理時的訊號複雜度測得。<i>Brain and Cognition 2014</i>'},
+      {en:'<b>We argued a decade ago that stimulation and exercise should be combined.</b> Testing that properly is now a core aim of the lab. <i>Frontiers in Psychology 2015</i>',
+       zh:'<b>十年前我們就主張應將腦刺激與運動結合。</b>如何嚴謹檢驗這一點，現在是實驗室的核心目標。<i>Frontiers in Psychology 2015</i>'},
+    ]},
+  { c:'var(--navy2)', yrs:'2014–2026',
+    h:{en:'From the lab to the clinic',zh:'從實驗室走進臨床'},
+    p:{en:'Depression, Alzheimer disease, Parkinson disease, stroke, autism, anxiety — the same control network, failing in different ways.',
+       zh:'憂鬱症、阿茲海默症、帕金森氏症、中風、自閉症、焦慮症——同一個控制網路，以不同方式失靈。'},
+    li:[
+      {en:'<b>Randomised sham-controlled trials of theta-burst stimulation for treatment-resistant depression</b>, run with Taipei Veterans General Hospital. <i>Biological Psychiatry 2014, 2020</i>',
+       zh:'<b>與台北榮總合作進行的難治型憂鬱症θ叢集刺激隨機假刺激對照試驗。</b><i>Biological Psychiatry 2014、2020</i>'},
+      {en:'<b>An EEG marker that detects mild cognitive impairment</b> with 0.82 sensitivity — and forecasts who will progress to Alzheimer disease. <i>Frontiers in Aging Neuroscience 2023</i>',
+       zh:'<b>一項腦波指標能以 0.82 敏感度偵測輕度認知障礙</b>，並預測誰會進展為阿茲海默症。<i>Frontiers in Aging Neuroscience 2023</i>'},
+      {en:'<b>A brain marker measured before treatment tells us who will respond to it</b> — the problem that matters most in clinical brain stimulation. <i>Int J Clinical and Health Psychology 2025</i>',
+       zh:'<b>治療前測得的腦部指標可預測誰會有反應</b>——這是臨床腦刺激中最關鍵的問題。<i>Int J Clinical and Health Psychology 2025</i>'},
+    ]},
+];
+
+/* UPDATED OFFICIAL GOOGLE SCHOLAR CITATION METRICS & TOP CITED PAPERS */
+const TOPCITED = [
+  {c:546,y:2013,t:{en:'Open vs. closed skill sports and the modulation of inhibitory control',zh:'開放性與封閉性技能運動對抑制控制的調節'},j:'PLoS ONE'},
+  {c:415,y:2015,t:{en:'Regulatory considerations for the clinical and research use of transcranial direct current stimulation (tDCS)',zh:'經顱直流電刺激 (tDCS) 臨床與研究應用之法規與共識考量'},j:'Clin Res Regul Aff'},
+  {c:406,y:2014,t:{en:'Efficacy of prefrontal theta-burst stimulation in refractory depression: a randomized sham-controlled study',zh:'前額葉 θ 叢集刺激治療難治型憂鬱症之隨機假刺激對照研究'},j:'Brain'},
+  {c:330,y:2012,t:{en:'Unleashing potential: tDCS over right posterior parietal cortex improves change detection in low performers',zh:'釋放潛能：右後頂葉 tDCS 選擇性提升低表現者的改變偵測與工作記憶'},j:'Journal of Neuroscience'},
+  {c:321,y:2004,t:{en:'Dissociation of spatial attention and saccade preparation',zh:'空間注意力與眼動準備的解離研究'},j:'PNAS'},
+  {c:295,y:2011,t:{en:'Modulating inhibitory control with direct current stimulation of the superior medial frontal cortex',zh:'以直流電刺激上內側額葉調節抑制控制'},j:'NeuroImage'},
+  {c:249,y:2003,t:{en:'Human frontal eye fields and visual search',zh:'人類額葉眼動區與視覺搜尋之因果作用'},j:'J Neurophysiology'},
+  {c:239,y:2009,t:{en:'Control of prepotent responses by the superior medial frontal cortex',zh:'上內側額葉對優勢反應與大腦煞車的控制'},j:'NeuroImage'},
+  {c:204,y:2016,t:{en:'Individual differences and state-dependent responses in transcranial direct current stimulation',zh:'經顱直流電刺激的個別差異與狀態依賴反應'},j:'Front Hum Neurosci'},
+  {c:186,y:2016,t:{en:'On Holo-Hilbert spectral analysis: a full informational spectral representation for nonlinear and non-stationary data',zh:'全希爾伯特頻譜分析 (HHSA)：非線性與非穩態數據的全資訊頻譜表示法'},j:'Phil Trans R Soc A'},
+];
+
+const JOURNALS = [
+  {n:'Journal of Neuroscience', k:3},
+  {n:'Biological Psychiatry', k:3},
+  {n:'Brain', k:2},
+  {n:'Proceedings of the National Academy of Sciences (PNAS)', k:2},
+  {n:'Cerebral Cortex', k:4},
+  {n:'Brain Stimulation', k:4},
+  {n:'NeuroImage', k:5},
+  {n:'Human Brain Mapping', k:7},
+  {n:'Scientific Reports', k:4},
+  {n:'PLoS ONE', k:8},
+];
+
+/* Annual citation counts from Scholar: 2019-2026 */
+const CITATIONS_PER_YEAR = {
+  2019: 450,
+  2020: 510,
+  2021: 620,
+  2022: 580,
+  2023: 600,
+  2024: 780,
+  2025: 800,
+  2026: 410
+};
+
+const YEARS = {2000:1,2003:3,2004:4,2005:2,2008:3,2009:1,2010:6,2011:7,2012:8,2013:11,2014:14,
+  2015:10,2016:11,2017:4,2018:5,2019:7,2020:5,2021:9,2022:8,2023:9,2024:7,2025:9,2026:1};
+
+const TECH = [
+  {b:{en:'Transcranial magnetic stimulation (TMS)',zh:'穿顱磁刺激（TMS）'},
+   s:{en:'Switch a brain region off for a fraction of a second and watch what stops working. The closest thing cognitive science has to a causal experiment.',zh:'讓某個腦區短暫「離線」，觀察什麼功能停擺。這是認知科學最接近因果實驗的方法。'}},
+  {b:{en:'tDCS / tACS / oscillatory stimulation',zh:'經顱電刺激（tDCS／tACS）'},
+   s:{en:'Nudge cortical excitability with weak current, or drive a rhythm at a chosen frequency — and see whether behaviour follows.',zh:'以微弱電流調節皮質興奮性，或以特定頻率驅動節律，觀察行為是否隨之改變。'}},
+  {b:{en:'EEG and MEG',zh:'腦電波與腦磁圖'},
+   s:{en:'Millisecond-resolution recording of the brain at work, including high-density 128- and 256-channel systems.',zh:'以毫秒解析度記錄運作中的大腦，包含 128 與 256 通道高密度系統。'}},
+  {b:{en:'Nonlinear signal analysis',zh:'非線性訊號分析'},
+   s:{en:'Holo-Hilbert spectral analysis, empirical mode decomposition, multiscale entropy — methods co-developed in this building.',zh:'全希爾伯特頻譜分析、經驗模態分解、多尺度熵——都是在這棟樓裡共同開發的方法。'}},
+  {b:{en:'fMRI and structural MRI',zh:'功能性與結構性磁振造影'},
+   s:{en:'For localising targets and for combined stimulation–imaging designs.',zh:'用於定位刺激標的，以及刺激與造影的結合設計。'}},
+  {b:{en:'Eye tracking and pupillometry',zh:'眼動追蹤與瞳孔測量'},
+   s:{en:'Saccades and pupil size as a continuous read-out of attention and arousal.',zh:'以眼動與瞳孔大小作為注意力與喚起程度的連續指標。'}},
+  {b:{en:'Clinical trial methodology',zh:'臨床試驗方法學'},
+   s:{en:'Randomisation, blinding, pre-registration and analysis — learned inside real trials with our hospital partners.',zh:'隨機分派、盲化、預先註冊與分析——在與醫院夥伴合作的真實試驗中學會。'}},
+  {b:{en:'Programming and machine learning',zh:'程式設計與機器學習'},
+   s:{en:'MATLAB and Python for experiment control, signal processing and classification models.',zh:'以 MATLAB 與 Python 進行實驗控制、訊號處理與分類模型建構。'}},
+];
+
+/* ==================================================================
+   RENDER DOM SECTIONS
+================================================================== */
+function renderCards(){
+  document.getElementById('expgrid').innerHTML = EXPERIMENTS.map(e => `
+    <div class="expcard" style="background:${e.bg}" onclick="openExp('${e.id}')">
+      <div class="tagline" style="color:${e.color}">${t(e.tag)}</div>
+      <h3>${t(e.name)}</h3>
+      <p>${t(e.blurb)}</p>
+      <div class="bottom-row">
+        <div class="go">${LANG==='en'?'Run it →':'開始 →'}</div>
+        <div class="mins">${t(e.mins)}</div>
+      </div>
+    </div>`).join('');
+}
+function renderThemes(){
+  document.getElementById('themegrid').innerHTML = THEMES.map(x => `
+    <div class="theme">
+      <div class="th-top"><span class="dot" style="background:${x.c}"></span>
+        <h3>${t(x.h)}</h3><span class="yrs">${x.yrs}</span></div>
+      <p>${t(x.p)}</p>
+      <ul>${x.li.map(l=>`<li>${t(l)}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+function renderTech(){
+  document.getElementById('techgrid').innerHTML = TECH.map(x =>
+    `<div class="tech"><b>${t(x.b)}</b><span>${t(x.s)}</span></div>`).join('');
+}
+function renderImpact(){
+  // Citation Trajectory Chart (2019-2026)
+  const ys = Object.keys(CITATIONS_PER_YEAR).map(Number).sort((a,b)=>a-b);
+  const max = Math.max(...ys.map(y=>CITATIONS_PER_YEAR[y]));
+  const W=520,H=170,pad=26,bw=(W-pad*2)/ys.length;
+  let bars='';
+  ys.forEach((y,i)=>{
+    const h=(CITATIONS_PER_YEAR[y]/max)*(H-pad-18);
+    const x=pad+i*bw, yy=H-18-h;
+    bars+=`<rect x="${x+1}" y="${yy}" width="${bw-2}" height="${h}" rx="2" fill="#1F7A8C" opacity=".85" style="cursor:pointer" onclick="filterByYear(${y})">
+      <title>${y}: ${CITATIONS_PER_YEAR[y]} ${LANG==='en'?'citations (Click to filter papers)':'次引用（點擊篩選該年論文）'}</title></rect>`;
+    bars+=`<text x="${x+bw/2}" y="${H-5}" font-size="9.5" fill="#6E6E6E" font-weight="700" text-anchor="middle">${y}</text>`;
+  });
+  document.getElementById('yearchart').innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${bars}</svg>`;
+
+  // journals
+  document.getElementById('jlist').innerHTML = JOURNALS.map(j=>`
+    <div style="display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.2px">
+      <span style="flex:1;color:#333">${j.n}</span>
+      <span style="font-weight:800;color:var(--navy);min-width:22px;text-align:right">${j.k}</span>
+    </div>`).join('');
+  // top cited
+  document.getElementById('toplist').innerHTML = TOPCITED.map(p=>`
+    <li><span class="cnum">${p.c}</span>
+      <span class="ctitle"><b>${t(p.t)}</b>${p.j} · ${p.y}</span></li>`).join('');
+}
+
+function filterByYear(yr){
+  document.getElementById('lib-search-input').value = yr.toString();
+  filterPapers();
+  document.getElementById('library').scrollIntoView({behavior:'smooth'});
+}
+
+/* ==================================================================
+   MODAL PLUMBING & ENHANCED FINDINGS CARDS
+================================================================== */
+let modalOpen=false, activeKeyHandler=null, timers=[];
+const stage=()=>document.getElementById('stage');
+const below=()=>document.getElementById('below');
+function setProg(f){document.getElementById('prog').style.width=Math.round(f*100)+'%';}
+function later(fn,ms){const id=setTimeout(fn,ms);timers.push(id);return id;}
+function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+function closeModal(){
+  modalOpen=false;
+  document.getElementById('modal').classList.remove('open');
+  clearTimers();
+  if(activeKeyHandler){document.removeEventListener('keydown',activeKeyHandler);activeKeyHandler=null;}
+  stage().innerHTML=''; below().innerHTML=''; setProg(0);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modalOpen)closeModal();});
+function openExp(id){
+  const e=EXPERIMENTS.find(x=>x.id===id);
+  modalOpen=true;
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('mtitle').textContent=t(e.name);
+  setProg(0);
+  TASKS[id].intro();
+}
+function intro(html,startFn,btnLabel){
+  below().innerHTML='';
+  stage().innerHTML=`<div class="msg">${html}</div>`;
+  below().innerHTML=`<div class="touchrow"><button id="startbtn">${btnLabel||(LANG==='en'?'Begin':'開始')}</button></div>`;
+  document.getElementById('startbtn').onclick=startFn;
+}
+
+function showResult(mainNum, mainLbl, extraHtml, taskDesc, labFindings, significance, citations, searchQuery){
+  below().innerHTML=`
+    <div class="resultbox">
+      <div class="lbl">${mainLbl}</div>
+      <div class="num">${mainNum}</div>
+      ${extraHtml||''}
+    </div>
+    <div class="findbox">
+      <div style="margin-bottom:16px">
+        <div style="font-size:12px;font-weight:800;color:var(--teal);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">
+          🎯 ${LANG==='en'?'Task &amp; Neural Mechanism':'作業測試內容與神經機制'}
+        </div>
+        <div style="font-size:13.5px;color:#333;line-height:1.55">${taskDesc}</div>
+      </div>
+
+      <div style="margin-bottom:16px;padding-top:14px;border-top:1px solid var(--line)">
+        <div style="font-size:12px;font-weight:800;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">
+          🔬 ${LANG==='en'?'Juan Lab Empirical Discoveries (TMS / tDCS / EEG)':'中央大學實驗室關鍵發現 (TMS / tDCS / EEG)'}
+        </div>
+        <div style="font-size:13.5px;color:#333;line-height:1.55">${labFindings}</div>
+      </div>
+
+      <div style="margin-bottom:16px;padding-top:14px;border-top:1px solid var(--line)">
+        <div style="font-size:12px;font-weight:800;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">
+          🌟 ${LANG==='en'?'Scientific &amp; Clinical Significance':'科學貢獻與臨床應用價值'}
+        </div>
+        <div style="font-size:13.5px;color:#333;line-height:1.55">${significance}</div>
+      </div>
+
+      <div style="padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div style="font-size:12px;color:var(--grey);font-style:italic">📚 ${citations}</div>
+        <button class="filter-region-btn" onclick="closeModal(); filterByRegionQuery('${searchQuery}');">
+          ${LANG==='en'?'Explore Related Papers in Library →':'在論文庫中檢索相關論文 →'}
+        </button>
+      </div>
+    </div>
+    <div class="touchrow" style="margin-top:16px">
+      <button onclick="closeModal()">${LANG==='en'?'Done':'完成'}</button>
+    </div>`;
+}
+
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const ri=(a,b)=>Math.floor(rnd(a,b+1));
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=ri(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const mean=a=>a.reduce((x,y)=>x+y,0)/(a.length||1);
+
+/* ==================================================================
+   TASK 1 — CHANGE DETECTION (vwm)
+================================================================== */
+const COLORS=['#E4483F','#3F7FE4','#41A85F','#E8C33C','#9B59B6','#E77F2E','#20B2AA','#F2F2F2'];
+const TASKS={};
+TASKS.vwm={
+  intro(){
+    intro(LANG==='en'
+      ? `<h4>Change detection</h4>
+         <p>A set of coloured squares flashes for a moment, then disappears. After a short blank, they come back — and one of them is circled.</p>
+         <p>Your job: was the circled square <b>the same colour</b> as before, or <b>different</b>?</p>
+         <p><span class="kbd">S</span> = same &nbsp;·&nbsp; <span class="kbd">D</span> = different</p>
+         <p style="color:#9FB4CE">36 trials. Guessing is fine when you're unsure — the maths accounts for it.</p>`
+      : `<h4>改變偵測作業</h4>
+         <p>一組彩色方塊會短暫閃現後消失。空白片刻後它們再度出現，其中一個被圈起來。</p>
+         <p>你的任務：被圈起的方塊顏色與剛才<b>相同</b>還是<b>不同</b>？</p>
+         <p><span class="kbd">S</span> = 相同 &nbsp;·&nbsp; <span class="kbd">D</span> = 不同</p>
+         <p style="color:#9FB4CE">共 36 個嘗試。不確定時用猜的沒關係——計算方式已將猜測納入考量。</p>`,
+      ()=>TASKS.vwm.run());
+  },
+  run(){
+    const sizes=[2,4,6], trials=shuffle([].concat(...sizes.map(n=>Array(12).fill(n))));
+    const data=trials.map(n=>({n,changed:Math.random()<0.5}));
+    let i=0; const resp=[];
+    below().innerHTML=`<div class="keyhint">${LANG==='en'?'<span class="kbd">S</span> same &nbsp; <span class="kbd">D</span> different':'<span class="kbd">S</span> 相同 &nbsp; <span class="kbd">D</span> 不同'}</div>
+      <div class="touchrow"><button onclick="window.__vwmKey('s')">${LANG==='en'?'Same (S)':'相同 (S)'}</button>
+      <button onclick="window.__vwmKey('d')">${LANG==='en'?'Different (D)':'不同 (D)'}</button></div>`;
+    const positions=n=>{
+      const cells=[]; for(let r=0;r<4;r++)for(let c=0;c<5;c++)cells.push([c,r]);
+      return shuffle(cells).slice(0,n);
+    };
+    function draw(items,probeIdx){
+      const cw=64,ch=64;
+      let html=`<div style="position:relative;width:${5*cw}px;height:${4*ch}px">`;
+      items.forEach((it,k)=>{
+        const ring=(probeIdx===k)?'box-shadow:0 0 0 3px #fff,0 0 0 6px #D9A441;':'';
+        html+=`<div style="position:absolute;left:${it.p[0]*cw+12}px;top:${it.p[1]*ch+12}px;
+                width:40px;height:40px;border-radius:5px;background:${it.c};${ring}"></div>`;
+      });
+      return html+'</div>';
+    }
+    function trial(){
+      if(i>=data.length) return finish();
+      setProg(i/data.length);
+      const d=data[i], pos=positions(d.n);
+      const cols=shuffle(COLORS.slice()).slice(0,d.n);
+      const items=pos.map((p,k)=>({p,c:cols[k]}));
+      const probe=ri(0,d.n-1);
+      stage().innerHTML='<div class="fix">+</div>';
+      later(()=>{
+        stage().innerHTML=draw(items,-1);
+        later(()=>{
+          stage().innerHTML='';
+          later(()=>{
+            const test=items.map(x=>({...x}));
+            if(d.changed){
+              const unused=COLORS.filter(c=>!cols.includes(c));
+              test[probe].c=unused.length?unused[ri(0,unused.length-1)]:COLORS[(COLORS.indexOf(test[probe].c)+3)%COLORS.length];
+            }
+            stage().innerHTML=draw(test,probe);
+            const t0=performance.now();
+            window.__vwmKey=k=>{
+              if(activeKeyHandler)document.removeEventListener('keydown',activeKeyHandler);
+              activeKeyHandler=null; window.__vwmKey=()=>{};
+              resp.push({n:d.n,changed:d.changed,said:k==='d'});
+              stage().innerHTML='';
+              i++; later(trial,260);
+            };
+            activeKeyHandler=ev=>{
+              const k=ev.key.toLowerCase();
+              if(k==='s'||k==='d'){ev.preventDefault();window.__vwmKey(k);}
+            };
+            document.addEventListener('keydown',activeKeyHandler);
+          },900);
+        },160);
+      },520);
+    }
+    function finish(){
+      setProg(1);
+      window.__vwmKey=()=>{};
+      const Ks=[2,4,6].map(n=>{
+        const s=resp.filter(r=>r.n===n);
+        const ch=s.filter(r=>r.changed), sa=s.filter(r=>!r.changed);
+        const H=ch.length?ch.filter(r=>r.said).length/ch.length:0;
+        const F=sa.length?sa.filter(r=>r.said).length/sa.length:0;
+        const K=n*(H-F)/Math.max(1e-6,1-F);
+        return {n,K:Math.max(0,K),H,F};
+      });
+      const best=Math.max(...Ks.map(k=>k.K));
+      const acc=Math.round(100*resp.filter(r=>r.said===r.changed).length/resp.length);
+      stage().innerHTML=`<div class="msg"><div class="big" style="color:#D9A441">${best.toFixed(1)}</div>
+        <p>${LANG==='en'?'items held in mind':'項目可同時保持在心中'}</p></div>`;
+      const rows=Ks.map(k=>`<div style="display:flex;gap:10px;font-size:13px;padding:3px 0">
+        <span style="width:96px;color:#3B6570">${LANG==='en'?'Set size':'項目數'} ${k.n}</span>
+        <span style="flex:1;background:#CDE4E9;border-radius:4px;position:relative;height:16px">
+          <i style="position:absolute;left:0;top:0;bottom:0;width:${Math.min(100,k.K/6*100)}%;background:#1F7A8C;border-radius:4px"></i></span>
+        <span style="width:42px;text-align:right;font-weight:700;color:#1F7A8C">${k.K.toFixed(1)}</span></div>`).join('');
+      
+      const taskDesc = LANG==='en'
+        ? "The Luck & Vogel change detection task measures visual working memory (VWM) capacity (estimated via Pashler's formula K). VWM is the online workspace of the human brain used to maintain visual representation across brief delays during active decision-making."
+        : "Luck & Vogel 改變偵測作業用於估計視覺工作記憶 (VWM) 容量上限（Pashler's K）。工作記憶是大腦的線上工作平台，用於在決策與推理過程中短暫維持與處理視覺資訊。";
+      
+      const labFindings = LANG==='en'
+        ? "When our lab applied transcranial direct current stimulation (tDCS) over the <b>Right Posterior Parietal Cortex (rPPC)</b> during this task, we discovered a striking individual difference: <b>tDCS selectively boosted capacity in lower-capacity individuals</b>, whereas high performers gained nothing. Follow-up EEG studies revealed that memory precision is dictated by frontoparietal theta-gamma oscillatory coupling."
+        : "當我們在進行此作業時於<b>右後頂葉皮質 (rPPC)</b> 施加經顱直流電刺激 (tDCS)，發現了顯著的個別差異：<b>tDCS 選擇性地提升了低容量個體的記憶容量</b>，但對原本高容量者無顯著效果。後續 EEG 研究進一步揭示，記憶精度是由額頂葉網絡間的 θ-γ 跨頻率節律調變所控制。";
+      
+      const significance = LANG==='en'
+        ? "This work established the paradigm of <b>State-Dependent Neuromodulation</b> — proving that brain stimulation outcomes depend directly on baseline neural states rather than producing universal enhancement. Clinically, this provides precision biomarkers for predicting cognitive decline in Mild Cognitive Impairment (MCI) and Alzheimer's disease."
+        : "此關鍵發現建立了<b>狀態依賴性腦刺激 (State-Dependent Neuromodulation)</b> 理論架構（介入效果取決於基準神經狀態），翻轉了傳統普遍增強的假設。在臨床上，此成果為輕度認知障礙 (MCI) 與阿茲海默症的早期警訊提供精準腦波指標。";
+      
+      const citations = "Tseng et al. (2012) <i>J Neurosci</i> (330 citations) · Hsu et al. (2014) <i>NeuroImage</i> · Juan et al. (2017) <i>Front Hum Neurosci</i>";
+
+      showResult(best.toFixed(1),
+        LANG==='en'?"Your capacity estimate (Pashler's K)":"你的容量估計值（Pashler's K）",
+        `<div style="margin-top:12px">${rows}</div>
+         <p style="font-size:12.6px;color:#3B6570;margin-top:10px">${LANG==='en'
+           ?`Overall accuracy ${acc}%. Typical adults land between 2.5 and 4 items.`
+           :`整體正確率 ${acc}%。一般成人約落在 2.5 至 4 個項目之間。`
+         }</p>`,
+        taskDesc, labFindings, significance, citations, 'PPC');
+    }
+    trial();
+  }
+};
+
+/* ==================================================================
+   TASK 2 — STOP-SIGNAL (ssrt)
+================================================================== */
+TASKS.ssrt={
+  intro(){
+    intro(LANG==='en'
+      ? `<h4>The stop-signal task</h4>
+         <p>An arrow appears. Press <span class="kbd">←</span> or <span class="kbd">→</span> to match it, as fast as you can.</p>
+         <p>But on about a quarter of trials the arrow <b style="color:#E4483F">turns red</b> shortly after. That is the stop signal — <b>do not respond at all</b>.</p>
+         <p style="color:#9FB4CE">64 trials. Go fast — waiting for the red defeats the measurement.</p>`
+      : `<h4>停止訊號作業</h4>
+         <p>箭頭出現時，請盡快按下對應的 <span class="kbd">←</span> 或 <span class="kbd">→</span>。</p>
+         <p>但約有四分之一的嘗試中，箭頭會在稍後<b style="color:#E4483F">變成紅色</b>。那是停止訊號——請<b>完全不要反應</b>。</p>
+         <p style="color:#9FB4CE">共 64 個嘗試。請盡快反應——刻意等紅色出現會使測量失效。</p>`,
+      ()=>TASKS.ssrt.run());
+  },
+  run(){
+    const N=64, stopIdx=new Set(shuffle([...Array(N).keys()]).slice(0,16));
+    let i=0, ssd=200, goRTs=[], stopTrials=[], ssds=[];
+    below().innerHTML=`<div class="keyhint">${LANG==='en'?'<span class="kbd">←</span> / <span class="kbd">→</span> to respond · nothing at all when it turns red':'以 <span class="kbd">←</span> / <span class="kbd">→</span> 反應 · 變紅時完全不要按'}</div>
+      <div class="touchrow"><button onclick="window.__ssKey('ArrowLeft')">←</button><button onclick="window.__ssKey('ArrowRight')">→</button></div>`;
+    function trial(){
+      if(i>=N) return finish();
+      setProg(i/N);
+      const isStop=stopIdx.has(i), dir=Math.random()<0.5?'L':'R';
+      stage().innerHTML='<div class="fix">+</div>';
+      later(()=>{
+        let responded=false;
+        const arrow=dir==='L'?'←':'→';
+        stage().innerHTML=`<div class="big" id="arw" style="font-size:86px">${arrow}</div>`;
+        const t0=performance.now();
+        if(isStop) later(()=>{const a=document.getElementById('arw'); if(a)a.style.color='#E4483F';},ssd);
+        window.__ssKey=key=>{
+          if(responded)return; responded=true;
+          const rt=performance.now()-t0;
+          document.removeEventListener('keydown',activeKeyHandler); activeKeyHandler=null;
+          if(isStop){ stopTrials.push({failed:true,ssd}); ssds.push(ssd); ssd=Math.max(50,ssd-50); }
+          else goRTs.push(rt);
+          stage().innerHTML=''; i++; later(trial,300);
+        };
+        activeKeyHandler=ev=>{
+          if(ev.key==='ArrowLeft'||ev.key==='ArrowRight'){ev.preventDefault();window.__ssKey(ev.key);}
+        };
+        document.addEventListener('keydown',activeKeyHandler);
+        later(()=>{
+          if(responded)return; responded=true;
+          document.removeEventListener('keydown',activeKeyHandler); activeKeyHandler=null;
+          if(isStop){ stopTrials.push({failed:false,ssd}); ssds.push(ssd); ssd=Math.min(900,ssd+50); }
+          stage().innerHTML=''; i++; later(trial,300);
+        },1100);
+      },480);
+    }
+    function finish(){
+      setProg(1); window.__ssKey=()=>{};
+      const pFail=stopTrials.length?stopTrials.filter(s=>s.failed).length/stopTrials.length:0.5;
+      const sorted=goRTs.slice().sort((a,b)=>a-b);
+      let ssrt=null, meanRT=mean(goRTs), meanSSD=mean(ssds);
+      if(sorted.length>4){
+        const idx=Math.min(sorted.length-1,Math.max(0,Math.round(pFail*sorted.length)-1));
+        ssrt=Math.round(sorted[idx]-meanSSD);
+      }
+      const converged = pFail>=0.25 && pFail<=0.75;
+      const ok = ssrt!==null && ssrt>60 && ssrt<600 && converged;
+      stage().innerHTML=`<div class="msg"><div class="big" style="color:#E8C33C">${ok?ssrt+' ms':'—'}</div>
+        <p>${LANG==='en'?'how long your brake takes':'你的煞車所需時間'}</p></div>`;
+      
+      const taskDesc = LANG==='en'
+        ? "The Logan & Cowan stop-signal paradigm estimates Stop-Signal Reaction Time (SSRT) in milliseconds — quantifying the covert speed of the internal cognitive 'brake' when an initiated motor response must be suddenly cancelled."
+        : "Logan & Cowan 停止訊號典範用於量化停止訊號反應時間（SSRT，單位毫秒）——精確測量當已啟動的動作反應被突然要求中止時，內部「大腦煞車」的作用速度。";
+      
+      const labFindings = LANG==='en'
+        ? "Using single- and double-pulse TMS, our lab demonstrated a <b>causal two-stage frontoparietal network</b>: the <b>pre-SMA</b> generates the early braking intent, while the <b>right IFG (rIFG)</b> executes motor suppression. Anodal tDCS over medial frontal cortex significantly shortened SSRT (accelerated braking). Furthermore, open-skill athletes (badminton, tennis) exhibited faster SSRT than closed-skill athletes."
+        : "透過單脈衝與雙脈衝 TMS，本實驗室建立了<b>因果雙階段神經網絡</b>：<b>前運動輔助區 (pre-SMA)</b> 負責產生早期煞車意圖，而<b>右下額迴 (rIFG)</b> 則執行動作抑制。於內側額葉施加陽極 tDCS 可顯著縮短 SSRT（加速煞車）。此外，開放性技能運動員（羽球、網球）展現出比封閉性運動員更快的 SSRT。";
+      
+      const significance = LANG==='en'
+        ? "Proved that human executive control can be causally augmented via non-invasive brain stimulation. It has wide clinical translations for impulsive violent offenders, ADHD, Parkinson's disease, and stroke rehabilitation, establishing SSRT as a gold-standard diagnostic biomarker for impulse control."
+        : "證明了人類執行控制能力可透過非侵入性腦刺激獲得因果性的提升。此成果廣泛應用於衝動型犯罪防制、注意力不足過動症 (ADHD)、帕金森氏症與中風復健，使 SSRT 成為衝動控制障礙的黃金診斷腦指標。";
+      
+      const citations = "Tsai et al. (2013) <i>PLoS ONE</i> (546 citations) · Hsu et al. (2011) <i>NeuroImage</i> (295 citations) · Juan et al. (2008) <i>BBR</i>";
+
+      showResult(ok?ssrt+' ms':'—',
+        LANG==='en'?'Stop-signal reaction time (SSRT)':'停止訊號反應時間（SSRT）',
+        `<p style="font-size:12.8px;color:#3B6570;margin-top:10px">${LANG==='en'
+          ? `Mean go reaction time ${Math.round(meanRT)} ms · failed to stop on ${Math.round(pFail*100)}% of stop trials.`
+          : `平均 go 反應時間 ${Math.round(meanRT)} 毫秒 · 停止嘗試中有 ${Math.round(pFail*100)}% 未能煞住。`
+        }</p>`,
+        taskDesc, labFindings, significance, citations, 'inhibition');
+    }
+    trial();
+  }
+};
+
+/* ==================================================================
+   TASK 3 — VISUAL SEARCH (search)
+================================================================== */
+TASKS.search={
+  intro(){
+    intro(LANG==='en'
+      ? `<h4>Visual search</h4>
+         <p>Find the target item. Press <span class="kbd">J</span> if present, <span class="kbd">F</span> if absent.</p>
+         <p>Round 1: find <b style="color:#E4483F">red</b> among green. Round 2: find <b>T</b> among Ls.</p>`
+      : `<h4>視覺搜尋作業</h4>
+         <p>找出目標物件。有目標請按 <span class="kbd">J</span>，沒有請按 <span class="kbd">F</span>。</p>
+         <p>第一輪：綠中找<b style="color:#E4483F">紅</b>。第二輪：L 中找 <b>T</b>。</p>`,
+      ()=>TASKS.search.run());
+  },
+  run(){
+    const conds=['feature','conjunction'], sizes=[4,8,16];
+    let list=[];
+    conds.forEach(c=>sizes.forEach(s=>{for(let k=0;k<4;k++)list.push({c,s,present:k<2});}));
+    list=[...shuffle(list.filter(x=>x.c==='feature')),...shuffle(list.filter(x=>x.c==='conjunction'))];
+    let i=0; const res=[];
+    below().innerHTML=`<div class="keyhint">${LANG==='en'?'<span class="kbd">J</span> present &nbsp; <span class="kbd">F</span> absent':'<span class="kbd">J</span> 有 &nbsp; <span class="kbd">F</span> 沒有'}</div>
+      <div class="touchrow"><button onclick="window.__vsKey('f')">${LANG==='en'?'Absent (F)':'沒有 (F)'}</button>
+      <button onclick="window.__vsKey('j')">${LANG==='en'?'Present (J)':'有 (J)'}</button></div>`;
+    function build(d){
+      const W=430,H=290,pts=[];
+      while(pts.length<d.s){
+        const p=[rnd(18,W-38),rnd(18,H-38)];
+        if(pts.every(q=>Math.hypot(q[0]-p[0],q[1]-p[1])>46))pts.push(p);
+      }
+      let html=`<div style="position:relative;width:${W}px;height:${H}px">`;
+      pts.forEach((p,k)=>{
+        const isT=d.present&&k===0;
+        if(d.c==='feature'){
+          html+=`<div style="position:absolute;left:${p[0]}px;top:${p[1]}px;width:20px;height:20px;border-radius:50%;background:${isT?'#E4483F':'#41A85F'}"></div>`;
+        }else{
+          const rot=[0,90,180,270][ri(0,3)];
+          html+=`<div style="position:absolute;left:${p[0]}px;top:${p[1]}px;width:22px;height:22px;transform:rotate(${rot}deg);color:#EDEDED;font:700 21px/22px Arial;text-align:center">${isT?'T':'L'}</div>`;
+        }
+      });
+      return html+'</div>';
+    }
+    function trial(){
+      if(i>=list.length)return finish();
+      setProg(i/list.length);
+      const d=list[i];
+      if(i===24){
+        stage().innerHTML=`<div class="msg"><h4>${LANG==='en'?'Round 2':'第二輪'}</h4><p>${LANG==='en'?'Find T among Ls.':'在 L 中找出 T。'}</p></div>`;
+        return later(()=>{nextTrial();},1800);
+      }
+      nextTrial();
+      function nextTrial(){
+        stage().innerHTML='<div class="fix">+</div>';
+        later(()=>{
+          stage().innerHTML=build(d);
+          const t0=performance.now();
+          window.__vsKey=k=>{
+            document.removeEventListener('keydown',activeKeyHandler);activeKeyHandler=null;
+            const rt=performance.now()-t0;
+            res.push({...d,rt,correct:(k==='j')===d.present});
+            stage().innerHTML=''; i++; later(trial,250);
+          };
+          activeKeyHandler=ev=>{const k=ev.key.toLowerCase();if(k==='j'||k==='f'){ev.preventDefault();window.__vsKey(k);}};
+          document.addEventListener('keydown',activeKeyHandler);
+        },430);
+      }
+    }
+    function slope(c){
+      const pts=sizes.map(s=>{
+        const r=res.filter(x=>x.c===c&&x.s===s&&x.correct&&x.rt<6000).map(x=>x.rt);
+        return r.length?[s,mean(r)]:null;
+      }).filter(Boolean);
+      if(pts.length<2)return null;
+      const mx=mean(pts.map(p=>p[0])),my=mean(pts.map(p=>p[1]));
+      const num=pts.reduce((a,p)=>a+(p[0]-mx)*(p[1]-my),0), den=pts.reduce((a,p)=>a+(p[0]-mx)**2,0);
+      return {slope:num/den};
+    }
+    function finish(){
+      setProg(1); window.__vsKey=()=>{};
+      const f=slope('feature'), c=slope('conjunction');
+      const fs=f?Math.round(f.slope):null, cs=c?Math.round(c.slope):null;
+      stage().innerHTML=`<div class="msg"><div class="big" style="font-size:38px;color:#41A85F">${fs!==null?fs:'—'} vs ${cs!==null?cs:'—'} ms/item</div></div>`;
+      
+      const taskDesc = LANG==='en'
+        ? "Compares parallel feature search (where a target pops out instantly with a flat reaction time slope, ~0 ms/item) against serial conjunction search (where targets defined by multiple features require item-by-item inspection, producing a steep search slope)."
+        : "比較平行特徵搜尋（目標物因單一特徵自動突顯，搜尋斜率趨近 0 毫秒/項目）與序列結合搜尋（需組合多重特徵的目標物，必須逐一搜尋，產生陡峭的斜率）。";
+      
+      const labFindings = LANG==='en'
+        ? "Single-pulse TMS delivered over the human <b>Frontal Eye Fields (FEF)</b> selectively disrupted conjunction search while leaving feature search completely unimpaired. Crucially, our lab established that <b>spatial attention and saccade preparation are causally dissociable</b> in the human FEF — attention can be covertly allocated to a spatial location without triggering eye movements."
+        : "於人類<b>額葉眼動區 (FEF)</b> 施予單脈衝 TMS，會選擇性地損害困難的結合搜尋，卻完全不影響簡單的特徵搜尋。至關重要的是，本實驗室證實了<b>空間注意力與眼動準備在人類 FEF 是可分離的</b>——注意力可隱性分配至空間位置，而不必然觸發眼動執行。";
+      
+      const significance = LANG==='en'
+        ? "Resolved a fundamental controversy in visual neuroscience regarding the Premotor Theory of Attention. Showed that FEF acts as a master hub for covert visual selection, providing critical insights for understanding spatial neglect and attentional deficits in aging."
+        : "解答了視覺神經科學領域關於「注意力前運動理論 (Premotor Theory of Attention)」長達數十年的爭議。證實 FEF 為隱性視覺選擇的主控樞紐，為解開空間忽視症 (spatial neglect) 及老化過程中的注意力衰退提供了核心機制。";
+      
+      const citations = "Juan et al. (2004) <i>PNAS</i> (321 citations) · Muggleton, Juan et al. (2003) <i>J Neurophysiol</i> (249 citations) · Juan et al. (2008) <i>Cereb Cortex</i>";
+
+      showResult((cs!==null&&fs!==null)?`${fs} vs ${cs} ms/item`:'—',
+        LANG==='en'?'Your search efficiency slope':'你的搜尋效率斜率',
+        '',
+        taskDesc, labFindings, significance, citations, 'FEF');
+    }
+    trial();
+  }
+};
+
+/* ==================================================================
+   TASK 4 — ATTENTIONAL SAMPLING (sample)
+================================================================== */
+TASKS.sample={
+  intro(){
+    intro(LANG==='en'
+      ? `<h4>Attentional sampling</h4>
+         <p>Fixate on the center. Press <span class="kbd">Space</span> the instant you see a faint patch.</p>`
+      : `<h4>注意力取樣作業</h4>
+         <p>盯住中央。看到微弱小塊出現請立刻按 <span class="kbd">空白鍵</span>。</p>`,
+      ()=>TASKS.sample.run());
+  },
+  run(){
+    const SOAs=[320,420,520,620,720,820,920,1020];
+    let list=[]; SOAs.forEach(s=>{list.push({soa:s,present:true});list.push({soa:s,present:true});});
+    list=shuffle(list).slice(0,30);
+    let i=0; const res=[];
+    below().innerHTML=`<div class="keyhint">${LANG==='en'?'Press <span class="kbd">Space</span> when you see it':'看到小塊時按 <span class="kbd">空白鍵</span>'}</div>
+      <div class="touchrow"><button onclick="window.__saKey()">${LANG==='en'?'I see it':'我看到了'}</button></div>`;
+    function trial(){
+      if(i>=list.length)return finish();
+      setProg(i/list.length);
+      const d=list[i], side=Math.random()<0.5?-1:1;
+      stage().innerHTML='<div class="fix">+</div>';
+      later(()=>{
+        stage().innerHTML=`<div style="width:70px;height:70px;border-radius:50%;background:#FFF;opacity:.92"></div>`;
+        later(()=>{
+          stage().innerHTML='<div class="fix">+</div>';
+          later(()=>{
+            let done=false;
+            if(d.present){
+              stage().innerHTML=`<div class="fix">+</div>
+                <div style="position:absolute;left:calc(50% + ${side*150}px);top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:#8FA0B4;opacity:.20"></div>`;
+              later(()=>{if(!done)stage().innerHTML='<div class="fix">+</div>';},70);
+            }
+            const respond=()=>{
+              if(done)return; done=true;
+              document.removeEventListener('keydown',activeKeyHandler);activeKeyHandler=null;
+              res.push({soa:d.soa,present:d.present,hit:true});
+              stage().innerHTML=''; i++; later(trial,280);
+            };
+            window.__saKey=respond;
+            activeKeyHandler=ev=>{if(ev.code==='Space'||ev.key===' '){ev.preventDefault();respond();}};
+            document.addEventListener('keydown',activeKeyHandler);
+            later(()=>{
+              if(done)return; done=true;
+              document.removeEventListener('keydown',activeKeyHandler);activeKeyHandler=null;
+              res.push({soa:d.soa,present:d.present,hit:false});
+              stage().innerHTML=''; i++; later(trial,280);
+            },900);
+          },d.soa);
+        },90);
+      },420);
+    }
+    function finish(){
+      setProg(1); window.__saKey=()=>{};
+      const pres=res.filter(r=>r.present);
+      const hit=pres.length?pres.filter(r=>r.hit).length/pres.length:0;
+      stage().innerHTML=`<div class="msg"><div class="big" style="color:#5E9E7E">${Math.round(hit*100)}%</div></div>`;
+      
+      const taskDesc = LANG==='en'
+        ? "Tests target detection at high temporal resolution across varying Short Time-Intervals (SOAs 300–1000 ms), revealing the temporal dynamics and periodic fluctuations of human visual awareness over time."
+        : "以高時間解析度測試不同短時間間隔 (SOA 300–1000 ms) 下的目標偵測，揭示人類視覺意識隨時間發生的動態週期性波動。";
+      
+      const labFindings = LANG==='en'
+        ? "Our lab discovered that visual attention is not a continuous spotlight, but a <b>rhythmic sampling process operating at 4–8 Hz theta frequencies</b>. Spatial expectations and cues actively restructure this temporal sampling rhythm, mediated by phase coupling between the <b>Right Temporoparietal Junction (rTPJ)</b> and frontoparietal networks."
+        : "實驗室研究發現視覺注意力並非持續不變的聚光燈，而是以 <b>4–8 Hz θ 頻率運作的節律性取樣過程</b>。空間預期與提示會主動重新架構此時間取樣節律，該過程由<b>右側顳頂交界 (rTPJ)</b> 與額頂網絡間的相位耦合所調控。";
+      
+      const significance = LANG==='en'
+        ? "Shifted the paradigm of cognitive neuroscience from static attention models to <b>Dynamic Oscillatory Sampling</b>. Opens new avenues for rhythm-tuned brain stimulation (such as tACS and theta-burst TMS) to restore attentional focus in ADHD, autism spectrum disorder, and age-related cognitive decline."
+        : "引領認知神經科學從靜態注意力模型跨入<b>動態振盪取樣 (Dynamic Oscillatory Sampling)</b> 的嶄新典範。為未來開發「頻率調控型腦刺激」（如 tACS 與 θ 叢集 TMS）提供科學基礎，用以改善 ADHD、自閉症與老化相關的注意力調控缺損。";
+      
+      const citations = "Huang, Liang & Juan (2024) <i>Cereb Cortex</i> · Chao, Juan et al. (2016) <i>Sci Rep</i> (186 citations)";
+
+      showResult(Math.round(hit*100)+'%',
+        LANG==='en'?'Detection rate':'偵測率',
+        '',
+        taskDesc, labFindings, significance, citations, 'rTPJ');
+    }
+    trial();
+  }
+};
+
+/* ==================================================================
+   PASSWORD ACCESS GATE LOGIC
+================================================================== */
+const VALID_PASSCODES = ['juanlab', 'vcl2026', 'juan2026', 'ncuvcl'];
+
+function checkPasscode(e){
+  if(e) e.preventDefault();
+  const pwd = (document.getElementById('passcode-input').value || '').trim().toLowerCase();
+  if(VALID_PASSCODES.includes(pwd)){
+    sessionStorage.setItem('juanlab_authenticated', 'true');
+    document.getElementById('password-gate').style.display = 'none';
+    document.body.style.overflow = '';
+  } else {
+    document.getElementById('passcode-error').style.display = 'block';
+    document.getElementById('passcode-input').focus();
+  }
+}
+window.checkPasscode = checkPasscode;
+
+function initPasswordGate(){
+  if(sessionStorage.getItem('juanlab_authenticated') === 'true'){
+    document.getElementById('password-gate').style.display = 'none';
+    document.body.style.overflow = '';
+  } else {
+    document.getElementById('password-gate').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+/* ==================================================================
+   INIT
+================================================================== */
+initPasswordGate();
+renderCards();
+renderThemes();
+renderTech();
+renderImpact();
+selectRegion('FEF');
+filterPapers();
+applyLangVisibility();
+</script>
+</body>
+</html>
